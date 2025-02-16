@@ -1,7 +1,20 @@
 import "./App.css";
+import CryptoPrice from "./components/CryptoPrice";
+import Header from "./components/Header";
+import MainBackGround from "./components/MainBackGround";
+import SideBar from "./components/SideBar";
 
 function App() {
-  return <div className="App">크립토 앱</div>;
+  return (
+    <section className="App">
+      <div>
+        <Header />
+        <MainBackGround />
+        <CryptoPrice />
+        <SideBar />
+      </div>
+    </section>
+  );
 }
 
 export default App;
