@@ -1,5 +1,4 @@
 import "./App.css";
-import CryptoPrice from "./components/CryptoPrice";
 import Header from "./components/Header";
 import MainBackGround from "./components/MainBackGround";
 import SideBar from "./components/SideBar";
@@ -10,7 +9,7 @@ function App() {
       <div>
         <Header />
         <MainBackGround />
-        <CryptoPrice />
+
         <SideBar />
       </div>
     </section>
