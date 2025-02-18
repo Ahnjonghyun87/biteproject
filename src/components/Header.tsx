@@ -1,14 +1,21 @@
 import "./Header.css";
 
 const Header = () => {
+  const handleMoveLogin = () => {};
+
+  const handleMoveSignUp = () => {};
+
+  const handleLogOut = () => {};
+
   return (
     <div className="header">
       <div className="container">
         <div className="title">비트코인-이더리움 앱</div>
         <div className="login">
-          <span>로그인</span>
-          <span>회원가입</span>
-          <span>로그아웃</span>
+          <button onClick={handleMoveLogin}>LogIn</button>
+
+          <button onClick={handleMoveSignUp}>SignUp</button>
+          <button onClick={handleLogOut}>LogOut</button>
         </div>
       </div>
     </div>
