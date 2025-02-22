@@ -1,6 +1,6 @@
 import CryptoPrice from "./CryptoPrice";
-import "./MainBackGround.css";
-const MainBackGround = () => {
+import "./Main.css";
+const Main = () => {
   return (
     <section className="container">
       <CryptoPrice />
@@ -8,4 +8,4 @@ const MainBackGround = () => {
   );
 };
 
-export default MainBackGround;
+export default Main;

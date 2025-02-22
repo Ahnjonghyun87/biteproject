@@ -1,19 +1,23 @@
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
 import Header from "./pages/Header";
-import MainBackGround from "./pages/MainBackGround";
+import LogIn from "./pages/LogIn";
+import Main from "./pages/Main";
 import "./reset.css";
 
 function App() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   return (
-    <section className="App">
-      <div>
-        <Header />
-        <MainBackGround />
-
-        <SideBar />
-      </div>
-    </section>
+    <>
+      <Header setIsLoginOpen={setIsLoginOpen} />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/sidebar" element={<SideBar />} />
+      </Routes>
+      {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}
+    </>
   );
 }
 

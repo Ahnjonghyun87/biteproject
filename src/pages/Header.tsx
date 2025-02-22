@@ -1,7 +1,13 @@
 import "./Header.css";
 
-const Header = () => {
-  const handleMoveLogin = () => {};
+interface LoginModalStatus {
+  setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen }) => {
+  const handleMoveLogin = () => {
+    setIsLoginOpen(true);
+  };
 
   const handleMoveSignUp = () => {};
 

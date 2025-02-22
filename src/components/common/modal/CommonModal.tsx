@@ -1,5 +1,5 @@
-import { useModal } from "@/app/context/modal.context";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
+import { useModal } from "../../../context/ModalContext";
 import BackDrop from "./BackDrop";
 
 interface CommonModalProps {
@@ -22,14 +22,14 @@ const CommonModal = ({
   onClose,
 }: CommonModalProps) => {
   const modal = useModal();
-  const router = useRouter();
+  const nav = useNavigate();
 
   const handleCloseByButton = () => {
     if (type === "confirm" && "normal" && "non-click") {
       modal.confirmClose();
     } else {
       if (path) {
-        router.push(`${path}`);
+        nav(`${path}`);
       }
       modal.close();
     }
@@ -43,7 +43,7 @@ const CommonModal = ({
       modal.confirmClose();
     } else {
       if (path) {
-        router.push(`${path}`);
+        nav(`${path}`);
       }
       modal.close();
     }
