@@ -1,10 +1,18 @@
+import { Container } from "@mui/material";
 import CryptoPrice from "./CryptoPrice";
-import "./Main.css";
+
 const Main = () => {
   return (
-    <section className="container">
+    <Container
+      maxWidth={false}
+      sx={{
+        width: "100%",
+        height: "100vh",
+        backgroundColor: "#37367b",
+      }}
+    >
       <CryptoPrice />
-    </section>
+    </Container>
   );
 };
 

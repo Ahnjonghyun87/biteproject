@@ -1,4 +1,6 @@
-import "./Header.css";
+import { AppBar, Box, Container, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+// import "./Header.css";
 
 interface LoginModalStatus {
   setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,17 +16,28 @@ const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen }) => {
   const handleLogOut = () => {};
 
   return (
-    <div className="header">
-      <div className="container">
-        <div className="title">비트코인-이더리움 앱</div>
-        <div className="login">
-          <button onClick={handleMoveLogin}>LogIn</button>
+    <AppBar position="fixed" sx={{ backgroundColor: "#f7931a", zIndex: 1000 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ display: "flex", justifyContent: "space-between", height: 100, alignItems: "center" }}
+      >
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          비트코인-이더리움 앱
+        </Typography>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button variant="contained" onClick={handleMoveLogin}>
+            LogIn
+          </Button>
 
-          <button onClick={handleMoveSignUp}>SignUp</button>
-          <button onClick={handleLogOut}>LogOut</button>
-        </div>
-      </div>
-    </div>
+          <Button variant="contained" onClick={handleMoveSignUp}>
+            SignUp
+          </Button>
+          <Button variant="contained" onClick={handleLogOut}>
+            LogOut
+          </Button>
+        </Box>
+      </Container>
+    </AppBar>
   );
 };
 

@@ -1,3 +1,4 @@
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../../context/ModalContext";
 import BackDrop from "./BackDrop";
@@ -53,33 +54,43 @@ const CommonModal = ({
   };
 
   const modalSizeClasses = {
-    small: "max-w-xs w-full",
-    medium: "max-w-md w-full",
-    large: "max-w-lg w-full",
+    small: { width: 300 },
+    medium: { width: 400 },
+    large: { width: 500 },
   };
 
   return (
     <BackDrop>
-      <section
-        className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center p-8 gap-4 rounded-lg bg-white z-[9999] ${modalSizeClasses[size]}`}
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          bgcolor: "white",
+          p: 4,
+          borderRadius: 2,
+          boxShadow: 24,
+          textAlign: "center",
+          ...modalSizeClasses[size],
+        }}
       >
-        <button className="absolute top-2 right-2 cursor-pointer" onClick={handleCloseByButton}>
+        <IconButton sx={{ position: "absolute", top: 8, right: 8 }} onClick={handleCloseByButton}>
           X
-        </button>
-        <h2 className="text-2xl font-semibold mb-2 text-center">{title}</h2>
+        </IconButton>
+        <Typography variant="h6" fontWeight="bold" mb={2}>
+          {title}
+        </Typography>
 
-        {content && <div className="modal-content">{content}</div>}
+        {content && <Box sx={{ mb: 2 }}>{content}</Box>}
 
-        {children && <div className="modal-children">{children}</div>}
+        {children && <Box>{children}</Box>}
         {type === "normal" && (
-          <button
-            className="px-4 py-1 bg-amber-500 text-black font-semibold border border-grey-200 rounded hover:opacity-85 active:opacity-75"
-            onClick={handleConfirmClick}
-          >
+          <Button variant="contained" color="warning" sx={{ mt: 2 }} onClick={handleConfirmClick}>
             확인
-          </button>
+          </Button>
         )}
-      </section>
+      </Box>
     </BackDrop>
   );
 };
