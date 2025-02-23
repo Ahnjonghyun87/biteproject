@@ -28,11 +28,11 @@ const LogIn: React.FC<LoginModalStatus> = ({ setIsLoginOpen }) => {
           content={
             <Box
               sx={{
-                maxWidth: "800px", // 컨테이너 최대 너비 지정
-                padding: "20px", // 내부 여백 추가
-                margin: "0 auto", // 중앙 정렬
-                lineHeight: "1.8", // 줄 간격 조정
-                letterSpacing: "0.05em", // 글자 간격 조정
+                maxWidth: "800px",
+                padding: "20px",
+                margin: "0 auto",
+                lineHeight: "1.8",
+                letterSpacing: "0.05em",
               }}
             >
               Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical

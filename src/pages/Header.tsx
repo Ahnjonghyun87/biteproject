@@ -4,14 +4,17 @@ import Button from "@mui/material/Button";
 
 interface LoginModalStatus {
   setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSignUpOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen }) => {
+const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen }) => {
   const handleMoveLogin = () => {
     setIsLoginOpen(true);
   };
 
-  const handleMoveSignUp = () => {};
+  const handleMoveSignUp = () => {
+    setIsSignUpOpen(true);
+  };
 
   const handleLogOut = () => {};
 
