@@ -24,7 +24,7 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
     setIsSignUpOpen(false);
   };
 
-  const { register, handleSubmit, formState, watch, control } = useForm<SignUpData>({
+  const { handleSubmit, watch, control, getValues } = useForm<SignUpData>({
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -53,7 +53,7 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
                 letterSpacing: "0.05em", // 글자 간격 조정
               }}
             >
-              <form onSubmit={handleSubmit(onsubmit)}>
+              <form>
                 <Controller
                   name="email"
                   control={control}
@@ -95,11 +95,34 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       id="password"
-                      placeholder="password"
+                      placeholder="비밀번호"
                       fullWidth
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      inputProps={{ maxLength: 20 }}
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : `${value.length}/20`}
+                    />
+                  )}
+                />
+                <Controller
+                  name="confirmPassword"
+                  control={control}
+                  defaultValue=""
+                  rules={{
+                    required: "비밀번호 확인을 입력해주세요",
+                    validate: (value) => value === getValues("password") || "비밀번호가 일치하지 않습니다",
+                  }}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      id="confirmPassword"
+                      type="password"
+                      placeholder="비밀번호 확인"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
                       inputProps={{ maxLength: 20 }}
                       value={value}
                       onChange={onChange}
@@ -122,7 +145,7 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <TextField
                       id="userNickname"
-                      placeholder="nickname"
+                      placeholder="닉네임"
                       fullWidth
                       InputLabelProps={{
                         shrink: true,
