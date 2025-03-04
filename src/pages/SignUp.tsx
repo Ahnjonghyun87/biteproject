@@ -24,7 +24,7 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
     setIsSignUpOpen(false);
   };
 
-  const { handleSubmit, watch, control, getValues } = useForm<SignUpData>({
+  const { register, handleSubmit, watch, control, getValues } = useForm<SignUpData>({
     mode: "onChange",
     defaultValues: {
       email: "",
@@ -34,6 +34,8 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
   });
 
   const password = watch("password");
+
+  const onSubmit = (data: SignUpData) => {};
 
   return (
     <div>
@@ -53,8 +55,9 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
                 letterSpacing: "0.05em", // 글자 간격 조정
               }}
             >
-              <form>
+              <form onChange={handleSubmit(onSubmit)}>
                 <Controller
+                  {...register("email")}
                   name="email"
                   control={control}
                   defaultValue=""
@@ -82,6 +85,7 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
                   )}
                 />
                 <Controller
+                  {...register("password")}
                   name="password"
                   control={control}
                   defaultValue=""
@@ -132,6 +136,7 @@ const SignUp: React.FC<LoginModalStatus> = ({ setIsSignUpOpen }) => {
                   )}
                 />
                 <Controller
+                  {...register("nickname")}
                   name="nickname"
                   control={control}
                   defaultValue=""
