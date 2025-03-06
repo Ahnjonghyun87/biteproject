@@ -14,9 +14,11 @@
     "@types/react-dom": "^19.0.3",
     "cra-template": "1.2.0",
     "d3": "^7.9.0",
+    "oidc-client-ts": "^3.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
+    "react-oidc-context": "^3.2.0",
     "react-router-dom": "^7.1.5",
     "react-scripts": "5.0.1",
     "web-vitals": "^4.2.4"
