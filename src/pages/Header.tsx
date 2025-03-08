@@ -1,5 +1,5 @@
 import { AppBar, Box, Container, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
+import LoginSignUpCognito from "./LoginSignUpCognito";
 // import "./Header.css";
 
 interface LoginModalStatus {
@@ -28,7 +28,8 @@ const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen })
           비트코인-이더리움 앱
         </Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
-          <Button variant="contained" onClick={handleMoveLogin}>
+          <LoginSignUpCognito></LoginSignUpCognito>
+          {/* <Button variant="contained" onClick={handleMoveLogin}>
             LogIn
           </Button>
 
@@ -37,7 +38,7 @@ const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen })
           </Button>
           <Button variant="contained" onClick={handleLogOut}>
             LogOut
-          </Button>
+          </Button> */}
         </Box>
       </Container>
     </AppBar>

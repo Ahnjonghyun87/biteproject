@@ -9,13 +9,12 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 const cognitoAuthConfig = {
-  authority: "https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_BhGWshYc8",
-  client_id: "7kmrd1gjl6cotomrb15h6rb4s",
-  redirect_uri: "https://naver.com",
+  authority: "https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_Ml8c3UIU9",
+  client_id: "7jr33v0qavqbsg33965pu9kft7",
+  redirect_uri: "http://localhost:3000/",
   response_type: "code",
-  scope: "phone openid email",
+  scope: "email openid phone",
 };
-
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
