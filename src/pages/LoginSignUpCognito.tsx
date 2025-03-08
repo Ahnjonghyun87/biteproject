@@ -30,13 +30,13 @@ const LoginSignUpCognito = () => {
   return (
     <Container>
       {auth.isAuthenticated ? (
-        <Box sx={{}}>
+        <Box display="flex" flexDirection="row" gap={2}>
           <Typography> Hello: {auth.user?.profile.email} </Typography>
           {/* <Typography> ID Token: {auth.user?.id_token} </Typography>
           <Typography> Access Token: {auth.user?.access_token} </Typography>
           <Typography> Refresh Token: {auth.user?.refresh_token} </Typography> */}
 
-          <Button sx={{ color: "white" }} onClick={() => auth.removeUser()}>
+          <Button variant="contained" sx={{ color: "white" }} onClick={() => auth.removeUser()}>
             로컬 로그아웃
           </Button>
           {/* <Button sx={{ color: "white" }} onClick={() => signOutRedirect()}>
@@ -44,9 +44,13 @@ const LoginSignUpCognito = () => {
           </Button> */}
         </Box>
       ) : (
-        <Box>
-          <Button onClick={() => auth.signinRedirect()}>로그인</Button>
-          <Button onClick={() => signUpRedirect()}>회원가입</Button>
+        <Box display="flex" flexDirection="row" gap={2}>
+          <Button variant="contained" sx={{ color: "white" }} onClick={() => auth.signinRedirect()}>
+            로그인
+          </Button>
+          <Button variant="contained" sx={{ color: "white" }} onClick={() => signUpRedirect()}>
+            회원가입
+          </Button>
         </Box>
       )}
     </Container>
