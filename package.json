@@ -22,6 +22,7 @@
     "react-oidc-context": "^3.2.0",
     "react-router-dom": "^7.1.5",
     "react-scripts": "5.0.1",
+    "use-upbit-api": "^2.0.9",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
