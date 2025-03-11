@@ -20,9 +20,10 @@ const CryptoPrice = () => {
     GetPrice();
   }, []);
 
-  const onClickPriceButton = () => {};
+  const onClickPriceButton = () => {
+    // <CryptoPriceDetail setIsCryptoDetailOpen={}/>
+  };
 
-  // const image = btcEthPrice?.market?KRW-BTC ?
   return (
     <Container sx={{ height: "75vh" }}>
       <Box>
@@ -43,11 +44,15 @@ const CryptoPrice = () => {
                   key={crypto.market}
                   src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"}
                 ></img>
-                <Button variant="contained">{crypto.market.substring(4)}</Button>
+                <Button onClick={() => onClickPriceButton} variant="contained">
+                  {crypto.market.substring(4)}
+                </Button>
                 <Typography component={"span"} padding={2} sx={{ fontSize: 36 }}>
                   {crypto.trade_price}
                 </Typography>
-                {/* <Typography>{crypto.change}</Typography> */}
+                <Typography component={"span"} sx={{ color: crypto.change === "RISE" ? "green" : "red" }}>
+                  {crypto.change}
+                </Typography>
               </Box>
             );
           })
