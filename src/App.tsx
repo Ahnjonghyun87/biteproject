@@ -17,7 +17,7 @@ function App() {
     <>
       <Header setIsLoginOpen={setIsLoginOpen} setIsSignUpOpen={setIsSignUpOpen} />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Main setIsCryptoDetailOpen={setIsCryptoDetailOpen} />} />
         <Route path="/sidebar" element={<SideBar />} />
       </Routes>
       {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}

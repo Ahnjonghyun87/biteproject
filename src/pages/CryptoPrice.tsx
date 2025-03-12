@@ -2,8 +2,14 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import UpbitCoinPrice from "../types/upbitCoinPrice";
-const CryptoPrice = () => {
+
+interface CryptoDetailPopUpStatus {
+  setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen }) => {
   const [btcEthPrice, setBtcEthPrice] = useState<UpbitCoinPrice>();
+
   // const QueryClient = useQuery<>({
   //   queryKey:["coinPrice", ]
   // })
@@ -20,12 +26,12 @@ const CryptoPrice = () => {
     GetPrice();
   }, []);
 
-  const onClickPriceButton = () => {
-    // <CryptoPriceDetail setIsCryptoDetailOpen={}/>
+  const onClickPricePopUpButton = () => {
+    setIsCryptoDetailOpen(true);
   };
 
   return (
-    <Container sx={{ height: "75vh" }}>
+    <Container maxWidth={"lg"} sx={{ height: "75vh" }}>
       <Box>
         {btcEthPrice ? (
           btcEthPrice.map((crypto, image) => {
@@ -44,8 +50,8 @@ const CryptoPrice = () => {
                   key={crypto.market}
                   src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"}
                 ></img>
-                <Button onClick={() => onClickPriceButton} variant="contained">
-                  {crypto.market.substring(4)}
+                <Button onClick={onClickPricePopUpButton} variant="contained">
+                  상세보기
                 </Button>
                 <Typography component={"span"} padding={2} sx={{ fontSize: 36 }}>
                   {crypto.trade_price}

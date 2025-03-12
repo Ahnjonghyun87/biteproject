@@ -1,7 +1,11 @@
 import { Box, Container } from "@mui/material";
 import CryptoPrice from "./CryptoPrice";
 
-const Main = () => {
+interface CryptoDetailPopUpStatus {
+  setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Main: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen }) => {
   return (
     <Container
       maxWidth={false}
@@ -20,7 +24,8 @@ const Main = () => {
           color: "white", // 텍스트 색상 (배경 대비)
         }}
       >
-        <CryptoPrice />
+        <CryptoPrice setIsCryptoDetailOpen={setIsCryptoDetailOpen} />
+        {/* <CryptoPriceDetail setIsCryptoDetailOpen={setIsCryptoDetailOpen} /> */}
       </Box>
     </Container>
   );

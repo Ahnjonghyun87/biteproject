@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CommonModal from "../components/common/modal/CommonModal";
@@ -10,12 +11,19 @@ interface CryptoDetailPopUpStatus {
 const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen }) => {
   const [btcEthPrice, setBtcEthPrice] = useState<UpbitCoinPrice>();
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {
-    setIsOpen(true);
-  }, []);
+
   const closeModal = () => {
     setIsCryptoDetailOpen(false);
   };
+
+  useEffect(() => {
+    setIsOpen(true);
+  }, []);
+
+  useEffect(() => {
+    GetPrice();
+  }, []);
+
   const GetPrice = async () => {
     try {
       const response = await axios.get("https://7o712sia8j.execute-api.ap-northeast-1.amazonaws.com/test1/items");
@@ -28,11 +36,37 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetai
     <div>
       {isOpen && (
         <CommonModal
-          title="회원가입"
+          title="CryptoPrice"
           type="non-click"
           size="large"
           onClose={closeModal}
-          content={<div>CryptoPriceDetail</div>}
+          content={
+            <Box>
+              {btcEthPrice ? (
+                btcEthPrice.map((crypto, image) => {
+                  return (
+                    <Box
+                      display={"inline"}
+                      justifyContent={"center"}
+                      padding={5}
+                      gap={4}
+                      sx={{ fontSize: 24, width: "100%" }}
+                      key={crypto.market}
+                    >
+                      <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                        {crypto.trade_price}
+                      </Typography>
+                      <Typography component={"span"} sx={{ color: crypto.change === "RISE" ? "green" : "red" }}>
+                        {crypto.change}
+                      </Typography>
+                    </Box>
+                  );
+                })
+              ) : (
+                <div>로딩...</div>
+              )}
+            </Box>
+          }
         />
       )}
     </div>
