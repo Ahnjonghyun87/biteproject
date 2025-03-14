@@ -17,12 +17,12 @@ function App() {
     <>
       <Header setIsLoginOpen={setIsLoginOpen} setIsSignUpOpen={setIsSignUpOpen} />
       <Routes>
-        <Route path="/" element={<Main setIsCryptoDetailOpen={setIsCryptoDetailOpen} />} />
+        <Route path="/" element={<Main setIsCryptoDetailOpen={setIsCryptoDetailOpen} whichCrypto="" />} />
         <Route path="/sidebar" element={<SideBar />} />
       </Routes>
       {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}
       {isSignUpOpen && <SignUp setIsSignUpOpen={setIsSignUpOpen} />}
-      {isCryptoDetailOpen && <CryptoPriceDetail setIsCryptoDetailOpen={setIsCryptoDetailOpen} />}
+      {isCryptoDetailOpen && <CryptoPriceDetail setIsCryptoDetailOpen={setIsCryptoDetailOpen} whichCrypto={""} />}
     </>
   );
 }

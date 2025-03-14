@@ -5,10 +5,13 @@ import UpbitCoinPrice from "../types/upbitCoinPrice";
 
 interface CryptoDetailPopUpStatus {
   setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  whichCrypto: string;
 }
 
 const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen }) => {
   const [btcEthPrice, setBtcEthPrice] = useState<UpbitCoinPrice>();
+
+  const [whichCrypto, setWhichCrypto] = useState<String>("");
 
   // const QueryClient = useQuery<>({
   //   queryKey:["coinPrice", ]
@@ -26,8 +29,9 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen 
     GetPrice();
   }, []);
 
-  const onClickPricePopUpButton = () => {
+  const onClickPricePopUpButton = (crypto: UpbitCoinPrice) => {
     setIsCryptoDetailOpen(true);
+    setWhichCrypto(crypto.market);
   };
 
   return (
@@ -50,7 +54,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen 
                   key={crypto.market}
                   src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"}
                 ></img>
-                <Button onClick={onClickPricePopUpButton} variant="contained">
+                <Button onClick={() => onClickPricePopUpButton(crypto)} variant="contained">
                   상세보기
                 </Button>
                 <Typography component={"span"} padding={2} sx={{ fontSize: 36 }}>
