@@ -7,9 +7,14 @@ import UpbitCoinPrice from "../types/upbitCoinPrice";
 interface CryptoDetailPopUpStatus {
   setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   whichCrypto: string;
+  setWhichCrypto?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen, whichCrypto }) => {
+const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
+  setIsCryptoDetailOpen,
+  whichCrypto,
+  setWhichCrypto,
+}) => {
   const [btcEthPrice, setBtcEthPrice] = useState<UpbitCoinPrice>();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -17,6 +22,11 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetai
     setIsCryptoDetailOpen(false);
   };
 
+  // useEffect(() => {
+  //   if (whichCrypto) {
+  //     setIsOpen(true);
+  //   }
+  // }, []);
   useEffect(() => {
     setIsOpen(true);
   }, []);
@@ -37,7 +47,7 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetai
     <div>
       {isOpen && (
         <CommonModal
-          title={whichCrypto === "KRW-BTC" ? "BTC PRICE" : "ETH-PRICE"}
+          title={whichCrypto === "KRW-BTC" ? "BTC" : "ETH"}
           type="non-click"
           size="large"
           onClose={closeModal}

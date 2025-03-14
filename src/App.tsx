@@ -9,20 +9,42 @@ import Main from "./pages/Main";
 import SignUp from "./pages/SignUp";
 import "./reset.css";
 
+interface CryptoDetailPopUpStatus {
+  setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  whichCrypto: string;
+  setWhichCrypto?: React.Dispatch<React.SetStateAction<string>>;
+}
+
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isCryptoDetailOpen, setIsCryptoDetailOpen] = useState(false);
+  const [whichCrypto, setWhichCrypto] = useState<string>("");
   return (
     <>
       <Header setIsLoginOpen={setIsLoginOpen} setIsSignUpOpen={setIsSignUpOpen} />
       <Routes>
-        <Route path="/" element={<Main setIsCryptoDetailOpen={setIsCryptoDetailOpen} whichCrypto="" />} />
+        <Route
+          path="/"
+          element={
+            <Main
+              setIsCryptoDetailOpen={setIsCryptoDetailOpen}
+              whichCrypto={whichCrypto}
+              setWhichCrypto={setWhichCrypto}
+            />
+          }
+        />
         <Route path="/sidebar" element={<SideBar />} />
       </Routes>
       {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}
       {isSignUpOpen && <SignUp setIsSignUpOpen={setIsSignUpOpen} />}
-      {isCryptoDetailOpen && <CryptoPriceDetail setIsCryptoDetailOpen={setIsCryptoDetailOpen} whichCrypto={""} />}
+      {isCryptoDetailOpen && (
+        <CryptoPriceDetail
+          setIsCryptoDetailOpen={setIsCryptoDetailOpen}
+          whichCrypto={whichCrypto}
+          setWhichCrypto={setWhichCrypto}
+        />
+      )}
     </>
   );
 }

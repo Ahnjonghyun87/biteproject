@@ -4,9 +4,10 @@ import CryptoPrice from "./CryptoPrice";
 interface CryptoDetailPopUpStatus {
   setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
   whichCrypto: string;
+  setWhichCrypto: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Main: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen }) => {
+const Main: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen, whichCrypto, setWhichCrypto }) => {
   return (
     <Container
       maxWidth={false}
@@ -25,7 +26,11 @@ const Main: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen }) => {
           color: "white", // 텍스트 색상 (배경 대비)
         }}
       >
-        <CryptoPrice setIsCryptoDetailOpen={setIsCryptoDetailOpen} whichCrypto={""} />
+        <CryptoPrice
+          setIsCryptoDetailOpen={setIsCryptoDetailOpen}
+          whichCrypto={whichCrypto}
+          setWhichCrypto={setWhichCrypto}
+        />
         {/* <CryptoPriceDetail setIsCryptoDetailOpen={setIsCryptoDetailOpen} /> */}
       </Box>
     </Container>
