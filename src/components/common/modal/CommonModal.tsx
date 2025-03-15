@@ -1,10 +1,11 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
+import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../../context/ModalContext";
 import BackDrop from "./BackDrop";
 
 interface CommonModalProps {
-  title: string;
+  title: ReactNode;
   content: React.ReactNode | null;
   children?: React.ReactNode;
   path?: string;
