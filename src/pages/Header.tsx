@@ -19,7 +19,17 @@ const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen })
   const handleLogOut = () => {};
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#f7931a", zIndex: 1000 }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        backgroundColor: "#f7931a",
+        zIndex: 1000,
+        border: 5,
+        borderRadius: 0.5,
+        borderColor: "#f7931a",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+      }}
+    >
       <Container
         maxWidth="lg"
         sx={{ display: "flex", justifyContent: "space-between", height: 100, alignItems: "center" }}

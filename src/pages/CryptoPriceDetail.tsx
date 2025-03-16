@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CommonModal from "../components/common/modal/CommonModal";
-import UpbitCoinPrice from "../types/upbitCoinPrice";
+import { UpbitCoinItem } from "../types/upbitCoin";
 
 interface CryptoDetailPopUpStatus {
   setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,10 +45,10 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
   //   }
   // };
 
-  const { data, isPending, error } = useQuery<UpbitCoinPrice>({
+  const { data, isPending, error } = useQuery<UpbitCoinItem>({
     queryKey: ["btcEthApi", whichCrypto],
     queryFn: async () => {
-      const response = await axios.get("https://7o712sia8j.execute-api.ap-northeast-1.amazonaws.com/test1/items");
+      const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/items");
 
       return whichCrypto === "KRW-BTC" ? response.data[0] : response.data[1];
     },
@@ -89,40 +89,44 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
                   key={data.market}
                 >
                   {" "}
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     <span style={{ color: "black" }}>현재가: </span>
                     <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>{data.trade_price}</span>
                     <span style={{ color: "black" }}> 원</span>
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     시초가: {""}
                     {data.opening_price} 원
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     전일종가: {""}
                     {data.prev_closing_price} 원
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     <span style={{ color: "black" }}>당일고가: </span>
                     <span style={{ color: "red" }}>{data.high_price}</span>
                     <span style={{ color: "black" }}> 원</span>
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     <span style={{ color: "black" }}>당일저가: </span>
                     <span style={{ color: "blue" }}>{data.low_price}</span>
                     <span style={{ color: "black" }}> 원</span>
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     금일 변동금액: {""}
-                    {data.change_price} 원
+                    <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>{data.change_price}</span> 원{" "}
+                    <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>
+                      {data.change_price > data.opening_price ? "▲" : "▼"} {""}
+                      {(data.change_rate * 100).toFixed(2)}%
+                    </span>
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     <span style={{ color: "black" }}>52주 최고가: </span>
                     <span style={{ color: "red" }}>{data.highest_52_week_price}</span>
                     <span style={{ color: "black" }}> 원 </span>
                     <span style={{ color: "gray" }}>({data.highest_52_week_date})</span>
                   </Typography>
-                  <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     <span style={{ color: "black" }}>52주 최저가: </span>
                     <span style={{ color: "blue" }}>{data.lowest_52_week_price}</span>
                     <span style={{ color: "black" }}> 원 </span>

@@ -1,7 +1,6 @@
 import { JSX } from "react/jsx-runtime";
 
-export default interface UpbitCoinPrice {
-  map(arg0: (v: any, i: any) => JSX.Element): import("react").ReactNode;
+export interface UpbitCoinItem {
   market: string;
   trade_date: string;
   trade_time: string;
@@ -28,4 +27,12 @@ export default interface UpbitCoinPrice {
   lowest_52_week_price: number;
   lowest_52_week_date: string;
   timestamp: number;
+}
+
+export interface UpbitCoinResponse {
+  message: string;
+  items: UpbitCoinItem[];
+
+  /** `map` 메서드 추가 (React에서 JSX 반환 가능) */
+  map: (callback: (item: UpbitCoinItem, index: number) => JSX.Element) => JSX.Element[];
 }
