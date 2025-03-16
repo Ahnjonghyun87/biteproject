@@ -50,7 +50,7 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
     queryFn: async () => {
       const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/items");
 
-      return whichCrypto === "KRW-BTC" ? response.data[0] : response.data[1];
+      return whichCrypto === "KRW-BTC" ? response.data.item[0] : response.data.item[1];
     },
     staleTime: 1000,
   });

@@ -1,6 +1,7 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect } from "react";
 import { UpbitCoinResponse } from "../types/upbitCoin";
 
 interface CryptoDetailPopUpStatus {
@@ -18,7 +19,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
       const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/items");
       // const response = await axios.get("https://7o712sia8j.execute-api.ap-northeast-1.amazonaws.com/test1/items");
 
-      return response.data.items;
+      return response.data ?? { items: [] };
     },
     staleTime: 1000,
   });
@@ -37,6 +38,10 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
   // useEffect(() => {
   //   GetPrice();
   // }, []);
+
+  useEffect(() => {
+    console.log("API 응답 데이터:", data);
+  }, [data]);
 
   const onClickPricePopUpButton = (market: string) => {
     setIsCryptoDetailOpen(true);
@@ -62,7 +67,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
         ) : error ? (
           <div>데이터를 불러오는 중 오류 발생!</div>
         ) : (
-          data?.map((crypto, image) => (
+          data?.items?.map((crypto) => (
             <Container
               sx={{
                 display: "inline",
