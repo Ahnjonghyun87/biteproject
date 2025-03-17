@@ -23,6 +23,8 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
     setIsCryptoDetailOpen(false);
   };
 
+  console.log(whichCrypto);
+
   // useEffect(() => {
   //   if (whichCrypto) {
   //     setIsOpen(true);
@@ -50,10 +52,15 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
     queryFn: async () => {
       const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/items");
 
-      return whichCrypto === "KRW-BTC" ? response.data.item[0] : response.data.item[1];
+      // return response.data;
+      return whichCrypto === "KRW-BTC" ? response.data.items[0] : response.data.items[1];
     },
     staleTime: 1000,
   });
+
+  useEffect(() => {
+    console.log("API 응답 데이터:", data);
+  }, [data]);
 
   return (
     <div>

@@ -67,7 +67,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
         ) : error ? (
           <div>데이터를 불러오는 중 오류 발생!</div>
         ) : (
-          data?.items?.map((crypto) => (
+          data?.items?.map((crypto, index) => (
             <Container
               sx={{
                 display: "inline",
@@ -75,14 +75,10 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                 justifyContent: "center", // 👈 중앙 정렬
                 alignItems: "center",
               }}
+              key={`${crypto.market}-${index}`}
             >
               {" "}
-              <img
-                height={100}
-                width={100}
-                key={crypto.market}
-                src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"}
-              />
+              <img height={100} width={100} src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"} />
               <Box
                 display={"inline"}
                 justifyContent={"center"}
@@ -90,7 +86,6 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                 gap={4}
                 border={1}
                 sx={{ fontSize: 48, width: "100%" }}
-                key={crypto.market}
               >
                 <Button onClick={() => onClickPricePopUpButton(crypto.market)} variant="contained">
                   일일변동량

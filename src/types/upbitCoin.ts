@@ -1,5 +1,3 @@
-import { JSX } from "react/jsx-runtime";
-
 export interface UpbitCoinItem {
   market: string;
   trade_date: string;
@@ -33,6 +31,6 @@ export interface UpbitCoinResponse {
   message: string;
   items: UpbitCoinItem[];
 
-  /** `map` 메서드 추가 (React에서 JSX 반환 가능) */
-  map: (callback: (item: UpbitCoinItem, index: number) => JSX.Element) => JSX.Element[];
+  // /** `map` 메서드 추가 (React에서 JSX 반환 가능) */
+  // map: (callback: (item: UpbitCoinItem, index: number) => JSX.Element) => JSX.Element[];
 }
