@@ -1,4 +1,5 @@
 import { AppBar, Box, Container, Typography } from "@mui/material";
+import CryptoDailyCanlde from "./CryptoDailyCanlde";
 import LoginSignUpCognito from "./LoginSignUpCognito";
 // import "./Header.css";
 
@@ -39,6 +40,7 @@ const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen })
         </Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
           <LoginSignUpCognito></LoginSignUpCognito>
+          <CryptoDailyCanlde />
           {/* <Button variant="contained" onClick={handleMoveLogin}>
             LogIn
           </Button>
