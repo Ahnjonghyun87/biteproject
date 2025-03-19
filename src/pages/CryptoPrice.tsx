@@ -88,7 +88,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                 sx={{ fontSize: 48, width: "100%" }}
               >
                 <Button onClick={() => onClickPricePopUpButton(crypto.market)} variant="contained">
-                  일일변동량
+                  자세히보기
                 </Button>
                 {/* <Button variant="contained">차트보기</Button> */}
                 <Typography

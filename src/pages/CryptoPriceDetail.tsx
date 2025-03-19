@@ -165,7 +165,10 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
               ) : (
                 <div>로딩...</div>
               )}
-              <CryptoDailyCandle whichCrypto={whichCrypto} />
+              <Box sx={{ width: "50%", textAlign: "left" }}>
+                <CryptoDailyCandle whichCrypto={whichCrypto} />
+              </Box>
+
               {/* <CryptoDailyCandle whichCrypto={whichCrypto} setWhichCrypto={setWhichCrypto ?? (() => {})} /> */}
             </Box>
           }

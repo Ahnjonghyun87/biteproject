@@ -22,6 +22,7 @@ const Main: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen, whichC
     >
       <Box
         sx={{
+          width: "100%",
           textAlign: "center", // 내부 콘텐츠 중앙 정렬
           color: "white", // 텍스트 색상 (배경 대비)
         }}

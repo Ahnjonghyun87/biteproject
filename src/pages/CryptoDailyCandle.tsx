@@ -11,7 +11,7 @@ interface CryptoDetailPopUpStatus {
 
 const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) => {
   const { data, isPending, error } = useQuery<UpbitDailyCandle>({
-    queryKey: ["btcEthApi"],
+    queryKey: ["btcEthDailyCandleApi"],
     queryFn: async () => {
       const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle");
       // const response = await axios.get("https://7o712sia8j.execute-api.ap-northeast-1.amazonaws.com/test1/items");
