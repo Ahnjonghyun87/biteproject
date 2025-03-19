@@ -58,9 +58,9 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
     staleTime: 1000,
   });
 
-  useEffect(() => {
-    console.log("API 응답 데이터:", data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log("API 응답 데이터:", data);
+  // }, [data]);
 
   return (
     <div>
@@ -121,9 +121,30 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
                   </Typography>
                   <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
                     금일 변동금액: {""}
-                    <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>{data.change_price}</span> 원{" "}
+                    <span
+                      style={{
+                        color:
+                          data.change === "RISE"
+                            ? "red"
+                            : data.change === "FALL"
+                              ? "blue"
+                              : data.change === "EVEN"
+                                ? "gray"
+                                : "black",
+                      }}
+                    >
+                      {data.change_price}
+                    </span>{" "}
+                    원{" "}
                     <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>
-                      {data.change_price > data.opening_price ? "▲" : "▼"} {""}
+                      {data.change_price > 0
+                        ? "▲"
+                        : data.change_price < 0
+                          ? "▼"
+                          : data.change_price === 0
+                            ? "--"
+                            : "even"}{" "}
+                      {""}
                       {(data.change_rate * 100).toFixed(2)}%
                     </span>
                   </Typography>
@@ -143,6 +164,8 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
               ) : (
                 <div>로딩...</div>
               )}
+              {/* <CryptoDailyCandle whichCrypto={whichCrypto} /> */}
+              {/* <CryptoDailyCandle whichCrypto={whichCrypto} setWhichCrypto={setWhichCrypto ?? (() => {})} /> */}
             </Box>
           }
         />

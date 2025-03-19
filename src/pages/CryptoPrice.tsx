@@ -102,8 +102,29 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
               {crypto.change}
              </Typography> */}{" "}
                 {
-                  <Typography component={"span"} sx={{ color: crypto.change === "RISE" ? "red" : "blue" }}>
-                    {crypto.change_price} 원 {crypto.change_price > crypto.opening_price ? "▲" : "▼"} {""}
+                  // <Typography component={"span"} sx={{ color: crypto.change === "RISE" ? "red" : "blue" }}>
+                  <Typography
+                    component={"span"}
+                    sx={{
+                      color:
+                        crypto.change === "RISE"
+                          ? "red"
+                          : crypto.change === "FALL"
+                            ? "blue"
+                            : crypto.change === "EVEN"
+                              ? "gray"
+                              : "black",
+                    }}
+                  >
+                    {crypto.change_price} 원{" "}
+                    {crypto.change_price > 0
+                      ? "▲"
+                      : crypto.change_price < 0
+                        ? "▼"
+                        : crypto.change_price === 0
+                          ? "--"
+                          : "even"}{" "}
+                    {""}
                     {(crypto.change_rate * 100).toFixed(2)}%
                   </Typography>
                 }
