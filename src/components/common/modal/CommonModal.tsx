@@ -10,7 +10,7 @@ interface CommonModalProps {
   children?: React.ReactNode;
   path?: string;
   type?: "normal" | "confirm" | "non-click";
-  size?: "small" | "medium" | "large"; // 모달 크기 옵션 추가
+  size?: "small" | "medium" | "large" | "xlarge" | "xxlarge" | "xxxlarge"; // 모달 크기 옵션 추가
   onClose?: () => void;
 }
 
@@ -58,6 +58,9 @@ const CommonModal = ({
     small: { width: 300 },
     medium: { width: 400 },
     large: { width: 500 },
+    xlarge: { width: 600 },
+    xxlarge: { width: 700 },
+    xxxlarge: { width: 800 },
   };
 
   return (

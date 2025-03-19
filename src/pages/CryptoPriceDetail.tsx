@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CommonModal from "../components/common/modal/CommonModal";
 import { UpbitCoinItem } from "../types/upbitCoin";
+import CryptoDailyCandle from "./CryptoDailyCandle";
 
 interface CryptoDetailPopUpStatus {
   setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -79,7 +80,7 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
             </Box>
           }
           type="non-click"
-          size="large"
+          size="xxxlarge"
           onClose={closeModal}
           content={
             <Box>
@@ -87,39 +88,39 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
                 <Box
                   display="flex"
                   flexDirection="column"
-                  alignItems="left" // 수직 중앙 정렬
+                  alignItems="right" // 수직 중앙 정렬
                   justifyContent="center" // 화면 중앙 정렬
-                  textAlign="left"
-                  padding={3}
-                  gap={1}
+                  textAlign="right"
+                  // paddingRight={3}
+                  gap={0.5}
                   sx={{ fontSize: 24, width: "100%" }}
                   key={data.market}
                 >
                   {" "}
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     <span style={{ color: "black" }}>현재가: </span>
                     <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>{data.trade_price}</span>
                     <span style={{ color: "black" }}> 원</span>
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     시초가: {""}
                     {data.opening_price} 원
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     전일종가: {""}
                     {data.prev_closing_price} 원
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     <span style={{ color: "black" }}>당일고가: </span>
                     <span style={{ color: "red" }}>{data.high_price}</span>
                     <span style={{ color: "black" }}> 원</span>
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     <span style={{ color: "black" }}>당일저가: </span>
                     <span style={{ color: "blue" }}>{data.low_price}</span>
                     <span style={{ color: "black" }}> 원</span>
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     금일 변동금액: {""}
                     <span
                       style={{
@@ -148,13 +149,13 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
                       {(data.change_rate * 100).toFixed(2)}%
                     </span>
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     <span style={{ color: "black" }}>52주 최고가: </span>
                     <span style={{ color: "red" }}>{data.highest_52_week_price}</span>
                     <span style={{ color: "black" }}> 원 </span>
                     <span style={{ color: "gray" }}>({data.highest_52_week_date})</span>
                   </Typography>
-                  <Typography component={"span"} padding={1} sx={{ fontSize: 14 }}>
+                  <Typography component={"span"} padding={1} sx={{ fontSize: 12 }}>
                     <span style={{ color: "black" }}>52주 최저가: </span>
                     <span style={{ color: "blue" }}>{data.lowest_52_week_price}</span>
                     <span style={{ color: "black" }}> 원 </span>
@@ -164,7 +165,7 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
               ) : (
                 <div>로딩...</div>
               )}
-              {/* <CryptoDailyCandle whichCrypto={whichCrypto} /> */}
+              <CryptoDailyCandle whichCrypto={whichCrypto} />
               {/* <CryptoDailyCandle whichCrypto={whichCrypto} setWhichCrypto={setWhichCrypto ?? (() => {})} /> */}
             </Box>
           }
