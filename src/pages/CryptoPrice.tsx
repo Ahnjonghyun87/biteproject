@@ -117,13 +117,13 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                     }}
                   >
                     {crypto.change_price} 원{" "}
-                    {crypto.change_price > 0
+                    {crypto.opening_price < crypto.trade_price
                       ? "▲"
-                      : crypto.change_price < 0
+                      : crypto.opening_price > crypto.trade_price
                         ? "▼"
                         : crypto.change_price === 0
                           ? "--"
-                          : "even"}{" "}
+                          : "--"}{" "}
                     {""}
                     {(crypto.change_rate * 100).toFixed(2)}%
                   </Typography>

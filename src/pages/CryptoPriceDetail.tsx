@@ -83,7 +83,10 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
           size="xxxlarge"
           onClose={closeModal}
           content={
-            <Box>
+            <Box display={"flex"}>
+              <Box sx={{ width: "50%", textAlign: "left" }}>
+                <CryptoDailyCandle whichCrypto={whichCrypto} />
+              </Box>
               {data ? (
                 <Box
                   display="flex"
@@ -138,13 +141,13 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
                     </span>{" "}
                     원{" "}
                     <span style={{ color: data.change === "RISE" ? "red" : "blue" }}>
-                      {data.change_price > 0
+                      {data.opening_price < data.trade_price
                         ? "▲"
-                        : data.change_price < 0
+                        : data.opening_price > data.trade_price
                           ? "▼"
                           : data.change_price === 0
                             ? "--"
-                            : "even"}{" "}
+                            : "--"}{" "}
                       {""}
                       {(data.change_rate * 100).toFixed(2)}%
                     </span>
@@ -165,11 +168,6 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
               ) : (
                 <div>로딩...</div>
               )}
-              <Box sx={{ width: "50%", textAlign: "left" }}>
-                <CryptoDailyCandle whichCrypto={whichCrypto} />
-              </Box>
-
-              {/* <CryptoDailyCandle whichCrypto={whichCrypto} setWhichCrypto={setWhichCrypto ?? (() => {})} /> */}
             </Box>
           }
         />

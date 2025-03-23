@@ -58,9 +58,9 @@ const CommonModal = ({
     small: { width: 300 },
     medium: { width: 400 },
     large: { width: 500 },
-    xlarge: { width: 600 },
-    xxlarge: { width: 700 },
-    xxxlarge: { width: 800 },
+    xlarge: { width: 600, Height: 600 },
+    xxlarge: { width: 700, Height: 700 },
+    xxxlarge: { width: 1200, Height: 800 },
   };
 
   return (

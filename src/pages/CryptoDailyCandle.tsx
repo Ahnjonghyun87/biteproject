@@ -10,17 +10,32 @@ interface CryptoDetailPopUpStatus {
 }
 
 const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) => {
-  const { data, isPending, error } = useQuery<UpbitDailyCandle>({
-    queryKey: ["btcEthDailyCandleApi"],
+  // const { data, isPending, error } = useQuery<UpbitDailyCandle>({
+  //   queryKey: ["btcEthDailyCandleApi"],
+  //   queryFn: async () => {
+  //     const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle");
+  //     // const response = await axios.get("https://7o712sia8j.execute-api.ap-northeast-1.amazonaws.com/test1/items");
+
+  //     return whichCrypto === "KRW-BTC" ? response.data.items[0] : response.data.items[1];
+  //   },
+  //   staleTime: 500,
+  // });
+  const { data, isPending, error } = useQuery<UpbitDailyCandle[]>({
+    queryKey: ["btcEthDailyCandleApi", whichCrypto],
     queryFn: async () => {
       const response = await axios.get("https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle");
-      // const response = await axios.get("https://7o712sia8j.execute-api.ap-northeast-1.amazonaws.com/test1/items");
 
-      return whichCrypto === "KRW-BTC" ? response.data.items[0] : response.data.items[1];
+      const matched = response.data.items
+        .filter((item: UpbitDailyCandle) => item.market === whichCrypto)
+        .sort(
+          (a: { candle_date_time_utc: string | number | Date }, b: { candle_date_time_utc: string | number | Date }) =>
+            new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
+        );
+
+      return matched.slice(0, 5); // 가장 최근의 데이터 반환
     },
     staleTime: 500,
   });
-
   useEffect(() => {
     console.log("일봉 응답 데이터:", data);
   }, [data]);
@@ -38,9 +53,13 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
           padding={3}
           gap={1}
           sx={{ fontSize: 24, width: "100%" }}
-          key={data.market}
+          key={data[0].market}
         >
-          <Typography>{data.trade_price}</Typography>
+          {data.map((candle, index) => (
+            <Typography key={index} sx={{ fontSize: 12 }}>
+              {candle.candle_date_time_kst} - {candle.trade_price.toLocaleString()}원
+            </Typography>
+          ))}
         </Box>
       ) : (
         <Box>로딩...</Box>
