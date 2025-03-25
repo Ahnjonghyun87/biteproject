@@ -55,13 +55,13 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
       // ✅ 조건에 따라 URL 설정
       switch (candleLength) {
         case "daily":
-          url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle";
+          url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/daily";
           break;
         case "weekly":
           url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/weekly";
           break;
         case "monthly":
-          url = "https://your-api.com/monthly";
+          url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/monthly";
           break;
         case "yearly":
           url = "https://your-api.com/yearly";
