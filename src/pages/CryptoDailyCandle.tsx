@@ -64,7 +64,7 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
           url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/monthly";
           break;
         case "yearly":
-          url = "https://your-api.com/yearly";
+          url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/yearly";
           break;
         default:
           throw new Error("지원하지 않는 캔들 길이입니다.");
@@ -107,6 +107,8 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
           onChange={handleChangeCandle}
           onOpen={() => console.log("드롭다운 열림")}
           onClose={() => console.log("드롭다운 닫힘")}
+          size="small"
+          sx={{ width: 80 }}
         >
           <MenuItem value="daily">일봉</MenuItem>
           <MenuItem value="weekly">주봉</MenuItem>
