@@ -1,16 +1,8 @@
-import {
-  Box,
-  Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Box, Container, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import CandleStickChartDemo from "../components/chart/CandleStickChartDemo";
 import { UpbitDailyCandle } from "../types/upbitCoin";
 
 interface CryptoDetailPopUpStatus {
@@ -117,7 +109,7 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
         </Select>
       </FormControl>
 
-      {data ? (
+      {/* {data ? (
         <Box
           display="flex"
           flexDirection="column"
@@ -135,6 +127,21 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
             </Typography>
           ))}
         </Box>
+      ) : (
+        <Box>로딩...</Box>
+      )} */}
+      {/* {data ? (
+        <>
+          <LineChart data={data} />
+        </>
+      ) : (
+        <Box>로딩...</Box>
+      )}
+    </Container> */}
+      {data ? (
+        <>
+          <CandleStickChartDemo data={data} candleLength={candleLength} />
+        </>
       ) : (
         <Box>로딩...</Box>
       )}
