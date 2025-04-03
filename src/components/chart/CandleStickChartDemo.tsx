@@ -60,7 +60,27 @@ const CandleStickChartDemo: React.FC<Props> = ({ data, candleLength }) => {
       .domain([d3.min(data, (d) => d.low_price)!, d3.max(data, (d) => d.high_price)!])
       .range([height, 0]);
     // x,y축 시각화
-    const xAxis = d3.axisBottom(xScale);
+    // const xAxis = d3.axisBottom(xScale).tickFormat((d,i,ticks)=>{
+    //   const curr = d.toString().slice(0,7);
+    //   const prev = i > 0 ? ticks[i - 1].toString().slice(0,7) : null;
+    //   return curr !== prev ? curr : "";
+    // });
+    const domain = xScale.domain();
+
+    const formatMonth = d3.timeFormat("%b"); // Jan, Feb, ...
+    const formatYear = d3.timeFormat("%Y");
+    const xAxis = d3.axisBottom(xScale).tickFormat((d) => {
+      const index = domain.indexOf(d.toString());
+      const currDate = new Date(d.toString()); // 문자열 → Date
+      const prevDate = index > 0 ? new Date(domain[index - 1]) : null;
+
+      const currYear = formatYear(currDate);
+      const prevYear = prevDate ? formatYear(prevDate) : null;
+
+      return currYear !== prevYear
+        ? currYear // 연도 바뀜 → 연도 출력
+        : formatMonth(currDate); // 아니면 월 약자 출력
+    });
     const yAxis = d3.axisLeft(yScale);
     //x,y축 선언
     chartGroup

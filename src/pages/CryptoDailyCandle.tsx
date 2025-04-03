@@ -7,6 +7,7 @@ import { UpbitDailyCandle } from "../types/upbitCoin";
 
 interface CryptoDetailPopUpStatus {
   whichCrypto: string;
+
   // setWhichCrypto: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -68,17 +69,35 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
       const matched = response.data.items
         .filter((item: UpbitDailyCandle) => item.market === whichCrypto)
         .sort(
-          (a: { candle_date_time_utc: string | number | Date }, b: { candle_date_time_utc: string | number | Date }) =>
+          (a: UpbitDailyCandle, b: UpbitDailyCandle) =>
             new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
         );
 
+      // .sort(
+      //   (a: { candle_date_time_utc: string | number | Date }, b: { candle_date_time_utc: string | number | Date }) =>
+      //     new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
+      // );
+
       return matched.slice(0, 25);
+      // const latest = matched.slice(-25).reverse(); // 최신순 정렬도 적용
+      // return latest;
     },
     staleTime: 500,
   });
 
   useEffect(() => {
     console.log("일봉 응답 데이터:", data);
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      console.table(
+        data.map((item) => ({
+          date: item.candle_date_time_utc,
+          parsed: new Date(item.candle_date_time_utc).toISOString(),
+        })),
+      );
+    }
   }, [data]);
 
   const handleChangeCandle = (event: SelectChangeEvent) => {
