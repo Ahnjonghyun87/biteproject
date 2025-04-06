@@ -14,11 +14,19 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
 
     const svg = d3.select(svgForChart.current);
     svg.selectAll("*").remove();
-
-    svg.attr("width", 800).attr("height", 400).style("border", "1px solid #ccc");
-    const margin = { top: 20, right: 50, bottom: 30, left: 60 };
-    const width = 800 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const margin = { top: 20, right: 60, bottom: 30, left: 60 };
+    const chartHeight = 400 - margin.top - margin.bottom;
+    const candleWidth = 10;
+    const calculatedWidth = data.length * candleWidth;
+    const dynamicChartWidth = Math.min(calculatedWidth, 800);
+    svg
+      .attr("width", dynamicChartWidth + margin.left + margin.right)
+      .attr("height", 400)
+      .style("border", "1px solid #ccc");
+    // svg.attr("width", 900).attr("height", 400).style("border", "1px solid #ccc");
+    // const margin = { top: 20, right: 50, bottom: 30, left: 60 };
+    // const width = 800 - margin.left - margin.right;
+    // const height = 400 - margin.top - margin.bottom;
 
     const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -41,13 +49,13 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
         }),
       )
 
-      .range([width, 0])
+      .range([dynamicChartWidth, 0])
       .padding(0.3);
     console.log("🔥 x축 검증", candleLength);
     const yScale = d3
       .scaleLinear()
       .domain([d3.min(data, (d) => d.low_price)!, d3.max(data, (d) => d.high_price)!])
-      .range([height, 0]);
+      .range([chartHeight, 0]);
 
     const domain = xScale.domain();
 
@@ -76,7 +84,7 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
     //x,y축 선언
     chartGroup
       .append("g")
-      .attr("transform", `translate(0, ${height})`) // x축은 아래쪽
+      .attr("transform", `translate(0, ${chartHeight})`) // x축은 아래쪽
       .call(xAxis);
 
     chartGroup.append("g").call(yAxis); // y축은 왼쪽
@@ -112,7 +120,11 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
     console.log("xScale 도메인", xScale.domain());
   }, [data, candleLength]);
 
-  return <svg ref={svgForChart}></svg>;
+  return (
+    <div style={{ overflowX: "auto", width: "1000px" }}>
+      <svg ref={svgForChart}></svg>
+    </div>
+  );
 };
 
 export default CandleStickChartDemo2;
