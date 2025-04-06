@@ -80,7 +80,7 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
       //     new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
       // );
 
-      return matched.slice(0, 100);
+      return matched.slice(0, 60);
       // const latest = matched.slice(-25).reverse(); // 최신순 정렬도 적용
       // return latest;
     },

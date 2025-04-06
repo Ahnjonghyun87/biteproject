@@ -16,7 +16,7 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
     svg.selectAll("*").remove();
 
     svg.attr("width", 800).attr("height", 400).style("border", "1px solid #ccc");
-    const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+    const margin = { top: 20, right: 50, bottom: 30, left: 60 };
     const width = 800 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -26,30 +26,19 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
     const xScale = d3
       .scaleBand()
       .domain(
-        data.map(
-          (d) => {
-            const time = d.candle_date_time_kst;
+        data.map((d) => {
+          const time = d.candle_date_time_kst;
 
-            if (candleLength === "daily" || candleLength === "weekly") {
-              return time.slice(0, 10);
-            } else if (candleLength === "monthly") {
-              return time.slice(0, 7);
-            } else if (candleLength === "yearly") {
-              return time.slice(0, 4);
-            } else {
-              return time; // fallback
-            }
-          },
-
-          // candleLength === "daily"
-          //   ? d.candle_date_time_kst.slice(0, 10)
-          //   : candleLength === "weekly"
-          //     ? d.candle_date_time_kst.slice(0, 10)
-          //     : candleLength === "monthly"
-          //       ? d.candle_date_time_kst.slice(0, 7)
-          //       : candleLength === "yearly"
-          //         ? d.candle_date_time_kst.slice(0, 4)
-        ),
+          if (candleLength === "daily" || candleLength === "weekly") {
+            return time.slice(0, 10);
+          } else if (candleLength === "monthly") {
+            return time.slice(0, 7);
+          } else if (candleLength === "yearly") {
+            return time.slice(0, 4);
+          } else {
+            return time; // fallback
+          }
+        }),
       )
 
       .range([width, 0])
@@ -59,12 +48,7 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
       .scaleLinear()
       .domain([d3.min(data, (d) => d.low_price)!, d3.max(data, (d) => d.high_price)!])
       .range([height, 0]);
-    // x,y축 시각화
-    // const xAxis = d3.axisBottom(xScale).tickFormat((d,i,ticks)=>{
-    //   const curr = d.toString().slice(0,7);
-    //   const prev = i > 0 ? ticks[i - 1].toString().slice(0,7) : null;
-    //   return curr !== prev ? curr : "";
-    // });
+
     const domain = xScale.domain();
 
     const formatMonth = d3.timeFormat("%b"); // Jan, Feb, ...
