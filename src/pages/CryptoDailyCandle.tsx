@@ -1,9 +1,10 @@
 import { Box, Container, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import CandleStickChartDemo from "../components/chart/CandleStickChartDemo";
+import React, { useState } from "react";
+
 import { UpbitDailyCandle } from "../types/upbitCoin";
+import CandleStickChartDemo2 from "./../components/chart/CandleStickChartDemo2";
 
 interface CryptoDetailPopUpStatus {
   whichCrypto: string;
@@ -68,6 +69,7 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
       // 🎯 필터링 및 정렬은 공통 처리 가능
       const matched = response.data.items
         .filter((item: UpbitDailyCandle) => item.market === whichCrypto)
+
         .sort(
           (a: UpbitDailyCandle, b: UpbitDailyCandle) =>
             new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
@@ -78,27 +80,27 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
       //     new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
       // );
 
-      return matched.slice(0, 25);
+      return matched.slice(0, 100);
       // const latest = matched.slice(-25).reverse(); // 최신순 정렬도 적용
       // return latest;
     },
     staleTime: 500,
   });
 
-  useEffect(() => {
-    console.log("일봉 응답 데이터:", data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log("일봉 응답 데이터:", data);
+  // }, [data]);
 
-  useEffect(() => {
-    if (data) {
-      console.table(
-        data.map((item) => ({
-          date: item.candle_date_time_utc,
-          parsed: new Date(item.candle_date_time_utc).toISOString(),
-        })),
-      );
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     console.table(
+  //       data.map((item) => ({
+  //         date: item.candle_date_time_utc,
+  //         parsed: new Date(item.candle_date_time_utc).toISOString(),
+  //       })),
+  //     );
+  //   }
+  // }, [data]);
 
   const handleChangeCandle = (event: SelectChangeEvent) => {
     const value = event.target.value;
@@ -159,7 +161,7 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
     </Container> */}
       {data ? (
         <>
-          <CandleStickChartDemo data={data} candleLength={candleLength} />
+          <CandleStickChartDemo2 data={data} candleLength={candleLength} />
         </>
       ) : (
         <Box>로딩...</Box>
