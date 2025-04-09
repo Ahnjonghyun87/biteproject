@@ -5,12 +5,15 @@ import { UpbitDailyCandle } from "../../types/upbitCoin";
 interface Props {
   data: UpbitDailyCandle[];
   candleLength: string;
+  onLoadMore: () => void;
 }
 
-const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
+const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore }) => {
   const svgForChart = useRef<SVGSVGElement>(null);
   useEffect(() => {
     if (!data || data.length === 0) return;
+
+    console.log("📈 CandleStickChartDemo2 재렌더됨", data.length);
 
     const svg = d3.select(svgForChart.current);
     svg.selectAll("*").remove();
@@ -19,6 +22,7 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
     const candleWidth = 10;
     const calculatedWidth = data.length * candleWidth;
     const dynamicChartWidth = Math.min(calculatedWidth, 800);
+    // const dynamicChartWidth = Math.max(data.length * candleWidth, 800);
     svg
       .attr("width", dynamicChartWidth + margin.left + margin.right)
       .attr("height", 400)
@@ -123,6 +127,22 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength }) => {
   return (
     <div style={{ overflowX: "auto", width: "1000px" }}>
       <svg ref={svgForChart}></svg>
+      {onLoadMore && (
+        <button
+          onClick={onLoadMore}
+          style={{
+            marginTop: "10px",
+            padding: "6px 12px",
+            background: "#007aff",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          과거 데이터 불러오기
+        </button>
+      )}
     </div>
   );
 };
