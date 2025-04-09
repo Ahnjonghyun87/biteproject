@@ -1,5 +1,5 @@
 import { Box, Container, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -12,13 +12,15 @@ interface CryptoDetailPopUpStatus {
 
 const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) => {
   const [candleLength, setCandleLength] = useState<string>("daily");
-  const limit = 300;
-  const { data, isPending, error } = useQuery<UpbitDailyCandle[]>({
-    queryKey: ["btcEthCandleApi", whichCrypto, candleLength, limit],
-    queryFn: async () => {
-      let url = "";
+  const LIMIT = 100; //btc와 eth 단 두 데이터를 하나의 다이나모DB에서 받아오기 때문에, 10개 데이터를 가져오면 이더5개 비트5개 가져옴. 즉, 원하는 캔들 갯수 x 2 분량으로 해야함
 
-      // ✅ 조건에 따라 URL 설정
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useInfiniteQuery<
+    UpbitDailyCandle[],
+    Error
+  >({
+    queryKey: ["btcEthCandleApi", whichCrypto, candleLength],
+    queryFn: async ({ pageParam = null }) => {
+      let url = "";
       switch (candleLength) {
         case "daily":
           url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/daily";
@@ -35,41 +37,100 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
         default:
           throw new Error("지원하지 않는 캔들 길이입니다.");
       }
-
-      // limit 값을 쿼리스트링으로 전달 (예: ?limit=300)
-      const finalUrl = `${url}?limit=${limit}`;
+      const finalUrl = pageParam ? `${url}?limit=${LIMIT}&before=${pageParam}` : `${url}?limit=${LIMIT}`;
       const response = await axios.get(finalUrl);
 
-      // const response = await axios.get(url);
-
-      // 🎯 필터링 및 정렬은 공통 처리 가능
       const matched = response.data.items
         .filter((item: UpbitDailyCandle) => item.market === whichCrypto)
-
         .sort(
           (a: UpbitDailyCandle, b: UpbitDailyCandle) =>
             new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
         );
 
-      return matched.slice(0, limit);
+      return matched;
     },
-    staleTime: 500,
+    getNextPageParam: (lastPage) => {
+      const lastItem = lastPage[lastPage.length - 1];
+      return lastItem?.candle_date_time_utc;
+    },
+    initialPageParam: null,
+    staleTime: 1000 * 60 * 5,
   });
 
-  useEffect(() => {
-    console.log("일봉 응답 데이터:", data);
-  }, [data?.length]);
+  const flatData = data?.pages.flat() || [];
+
+  // const { data, isPending, error } = useQuery<UpbitDailyCandle[]>({
+  //   queryKey: ["btcEthCandleApi", whichCrypto, candleLength, limit],
+  //   queryFn: async () => {
+  //     let url = "";
+
+  //     // ✅ 조건에 따라 URL 설정
+  //     switch (candleLength) {
+  //       case "daily":
+  //         url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/daily";
+  //         break;
+  //       case "weekly":
+  //         url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/weekly";
+  //         break;
+  //       case "monthly":
+  //         url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/monthly";
+  //         break;
+  //       case "yearly":
+  //         url = "https://mezflrpv8d.execute-api.ap-northeast-1.amazonaws.com/bite/candle/yearly";
+  //         break;
+  //       default:
+  //         throw new Error("지원하지 않는 캔들 길이입니다.");
+  //     }
+
+  //     // limit 값을 쿼리스트링으로 전달 (예: ?limit=300)
+  //     const finalUrl = `${url}?limit=${limit}`;
+  //     const response = await axios.get(finalUrl);
+
+  //     // const response = await axios.get(url);
+
+  //     // 🎯 필터링 및 정렬은 공통 처리 가능
+  //     const matched = response.data.items
+  //       .filter((item: UpbitDailyCandle) => item.market === whichCrypto)
+
+  //       .sort(
+  //         (a: UpbitDailyCandle, b: UpbitDailyCandle) =>
+  //           new Date(b.candle_date_time_utc).getTime() - new Date(a.candle_date_time_utc).getTime(),
+  //       );
+
+  //     return matched.slice(0, limit);
+  //   },
+  //   staleTime: 500,
+  // });
+
+  // useEffect(() => {
+  //   console.log("일봉 응답 데이터:", data);
+  // }, [data]);
+
+  // useEffect(() => {
+  //   if (data) {
+  //     console.table(
+  //       data.map((item) => ({
+  //         date: item.candle_date_time_utc,
+  //         parsed: new Date(item.candle_date_time_utc).toISOString(),
+  //       })),
+  //     );
+  //   }
+  // }, [data]);
 
   useEffect(() => {
-    if (data) {
+    console.log("일봉 응답 데이터:", flatData);
+  }, [flatData]);
+
+  useEffect(() => {
+    if (flatData) {
       console.table(
-        data.map((item) => ({
+        flatData.map((item) => ({
           date: item.candle_date_time_utc,
           parsed: new Date(item.candle_date_time_utc).toISOString(),
         })),
       );
     }
-  }, [data]);
+  }, [flatData]);
 
   const handleChangeCandle = (event: SelectChangeEvent) => {
     const value = event.target.value;
@@ -101,7 +162,8 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
 
       {data ? (
         <>
-          <CandleStickChartDemo2 data={data} candleLength={candleLength} />
+          <CandleStickChartDemo2 data={flatData} candleLength={candleLength} />
+          {isFetchingNextPage && <Box></Box>}
         </>
       ) : (
         <Box>로딩...</Box>
