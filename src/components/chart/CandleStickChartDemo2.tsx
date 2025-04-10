@@ -10,6 +10,11 @@ interface Props {
 
 const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore }) => {
   const svgForChart = useRef<SVGSVGElement>(null);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  const margin = { top: 20, right: 60, bottom: 30, left: 60 };
+  const VISIBLE_CANDLE_COUNT = 200;
+  const barWidth = 4;
+  const totalChartWidth = data.length * barWidth;
   useEffect(() => {
     if (!data || data.length === 0) return;
 
@@ -19,18 +24,22 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore
     svg.selectAll("*").remove();
     const margin = { top: 20, right: 60, bottom: 30, left: 60 };
     const chartHeight = 400 - margin.top - margin.bottom;
-    const candleWidth = 10;
-    const calculatedWidth = data.length * candleWidth;
-    const dynamicChartWidth = Math.min(calculatedWidth, 800);
+
+    const VISIBLE_CANDLE_COUNT = 200;
+    const barWidth = 4;
+
+    const visibleChartWidth = VISIBLE_CANDLE_COUNT * barWidth;
+    const totalChartWidth = data.length * barWidth;
+
+    // const candleWidth = 10;
+    // const calculatedWidth = data.length * candleWidth;
+    // const dynamicChartWidth = Math.min(calculatedWidth, 800);
     // const dynamicChartWidth = Math.max(data.length * candleWidth, 800);
     svg
-      .attr("width", dynamicChartWidth + margin.left + margin.right)
+      // .attr("width", dynamicChartWidth + margin.left + margin.right)
+      .attr("width", totalChartWidth + margin.left + margin.right)
       .attr("height", 400)
       .style("border", "1px solid #ccc");
-    // svg.attr("width", 900).attr("height", 400).style("border", "1px solid #ccc");
-    // const margin = { top: 20, right: 50, bottom: 30, left: 60 };
-    // const width = 800 - margin.left - margin.right;
-    // const height = 400 - margin.top - margin.bottom;
 
     const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -53,7 +62,7 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore
         }),
       )
 
-      .range([dynamicChartWidth, 0])
+      .range([totalChartWidth, 0])
       .padding(0.3);
     console.log("🔥 x축 검증", candleLength);
     const yScale = d3
@@ -123,26 +132,33 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore
     });
     console.log("xScale 도메인", xScale.domain());
   }, [data, candleLength]);
+  useEffect(() => {
+    if (scrollWrapperRef.current) {
+      scrollWrapperRef.current.scrollLeft = scrollWrapperRef.current.scrollWidth;
+    }
+  }, [data.length]);
 
   return (
-    <div style={{ overflowX: "auto", width: "1000px" }}>
-      <svg ref={svgForChart}></svg>
-      {onLoadMore && (
-        <button
-          onClick={onLoadMore}
-          style={{
-            marginTop: "10px",
-            padding: "6px 12px",
-            background: "#007aff",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
-        >
-          과거 데이터 불러오기
-        </button>
-      )}
+    <div ref={scrollWrapperRef} style={{ overflowX: "auto", width: "900px" }}>
+      <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
+        <svg ref={svgForChart}></svg>
+        {onLoadMore && (
+          <button
+            onClick={onLoadMore}
+            style={{
+              marginTop: "10px",
+              padding: "6px 12px",
+              background: "#007aff",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            과거 데이터 불러오기
+          </button>
+        )}
+      </div>
     </div>
   );
 };
