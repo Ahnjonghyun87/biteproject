@@ -14,7 +14,7 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
   const [candleLength, setCandleLength] = useState<string>("daily");
   const LIMIT = 100; //btc와 eth 단 두 데이터를 하나의 다이나모DB에서 받아오기 때문에, 10개 데이터를 가져오면 이더5개 비트5개 가져옴. 즉, 원하는 캔들 갯수 x 2 분량으로 해야함
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } = useInfiniteQuery<
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, error } = useInfiniteQuery<
     UpbitDailyCandle[],
     Error
   >({
@@ -116,6 +116,8 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
     console.log("🔥 선택된 값:", value);
     setCandleLength(event.target.value);
   };
+
+  if (isPending) return <div>데이터 로딩중</div>;
   console.log("🚀 ~ handleChangeCandle ~ setCandleLength:", setCandleLength);
   return (
     <Container sx={{ position: "relative", zIndex: 1500 }}>
