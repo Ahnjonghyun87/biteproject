@@ -5,12 +5,22 @@ import { UpbitDailyCandle } from "../../types/upbitCoin";
 interface Props {
   data: UpbitDailyCandle[];
   candleLength: string;
-  onLoadMore: () => void;
+  // onLoadMore: () => void;
+  fetchNextPage: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
-const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore }) => {
+const CandleStickChartDemo2: React.FC<Props> = ({
+  data,
+  candleLength,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}) => {
   const svgForChart = useRef<SVGSVGElement>(null);
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  // const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
   const VISIBLE_CANDLE_COUNT = 200;
   const barWidth = 4;
@@ -132,17 +142,88 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore
     });
     console.log("xScale 도메인", xScale.domain());
   }, [data, candleLength]);
-  useEffect(() => {
-    if (scrollWrapperRef.current) {
-      scrollWrapperRef.current.scrollLeft = scrollWrapperRef.current.scrollWidth;
-    }
-  }, [data.length]);
 
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+
+    const { scrollLeft } = scrollContainerRef.current;
+    if (scrollLeft < 30 && hasNextPage && !isFetchingNextPage) {
+      console.log("왼쪽 끝 감지됨, 다음 페이지 로딩");
+      fetchNextPage();
+    }
+  };
+
+  // useEffect(() => {
+  //   if (scrollWrapperRef.current) {
+  //     scrollWrapperRef.current.scrollLeft = scrollWrapperRef.current.scrollWidth;
+  //   }
+  // }, [data.length]);
+
+  // useEffect(() => {
+  //   if (!scrollContainerRef.current) return;
+  //   scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+  // }, [data]);
+  useEffect(() => {
+    if (!scrollContainerRef.current) return;
+    scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+  }, [data]);
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDragging = true;
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+      container.style.cursor = "grabbing";
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = x - startX; //drag 이동거리
+      container.scrollLeft = scrollLeft - walk;
+
+      // 왼쪽 끝 근처면 데이터 요청
+      if (container.scrollLeft < 30 && hasNextPage && !isFetchingNextPage) {
+        console.log("왼쪽 끝 도달 → 데이터 불러오기");
+        fetchNextPage();
+      }
+    };
+    const onMouseUp = () => {
+      isDragging = false;
+      container.style.cursor = "grab";
+    };
+    // 이벤트 등록
+    container.addEventListener("mousedown", onMouseDown);
+    container.addEventListener("mousemove", onMouseMove);
+    container.addEventListener("mouseup", onMouseUp);
+    container.addEventListener("mouseleave", onMouseUp);
+
+    // 초기 커서 스타일
+    container.style.cursor = "grab";
+    // 정리
+    return () => {
+      container.removeEventListener("mousedown", onMouseDown);
+      container.removeEventListener("mousemove", onMouseMove);
+      container.removeEventListener("mouseup", onMouseUp);
+      container.removeEventListener("mouseleave", onMouseUp);
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
   return (
-    <div ref={scrollWrapperRef} style={{ overflowX: "auto", width: "900px" }}>
+    <div
+      // ref={scrollWrapperRef}
+      ref={scrollContainerRef}
+      onScroll={handleScroll}
+      style={{ overflowX: "auto", width: "900px" }}
+    >
       <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
         <svg ref={svgForChart}></svg>
-        {onLoadMore && (
+        {/* {onLoadMore && (
           <button
             onClick={onLoadMore}
             style={{
@@ -157,7 +238,7 @@ const CandleStickChartDemo2: React.FC<Props> = ({ data, candleLength, onLoadMore
           >
             과거 데이터 불러오기
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

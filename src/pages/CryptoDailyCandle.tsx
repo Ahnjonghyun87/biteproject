@@ -147,11 +147,14 @@ const CryptoDailyCandle: React.FC<CryptoDetailPopUpStatus> = ({ whichCrypto }) =
             <CandleStickChartDemo2
               data={flatData}
               candleLength={candleLength}
-              onLoadMore={() => {
-                if (hasNextPage && !isFetchingNextPage) {
-                  fetchNextPage();
-                }
-              }}
+              fetchNextPage={fetchNextPage}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              // onLoadMore={() => {
+              //   if (hasNextPage && !isFetchingNextPage) {
+              //     fetchNextPage();
+              //   }
+              // }}
             />
           )}
         </>
