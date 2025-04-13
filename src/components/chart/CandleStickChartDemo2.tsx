@@ -21,10 +21,12 @@ const CandleStickChartDemo2: React.FC<Props> = ({
   const svgForChart = useRef<SVGSVGElement>(null);
   // const scrollWrapperRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const prevScrollRef = useRef({ scrollLeft: 0, scrollWidth: 0 });
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
   const VISIBLE_CANDLE_COUNT = 200;
   const barWidth = 4;
   const totalChartWidth = data.length * barWidth;
+
   useEffect(() => {
     if (!data || data.length === 0) return;
 
@@ -49,7 +51,8 @@ const CandleStickChartDemo2: React.FC<Props> = ({
       // .attr("width", dynamicChartWidth + margin.left + margin.right)
       .attr("width", totalChartWidth + margin.left + margin.right)
       .attr("height", 400)
-      .style("border", "1px solid #ccc");
+      .style("border", "1px solid #ccc")
+      .style("cursor", "crosshair"); //크로스헤어 추가하면 마우스 스크롤시 grabbing 모양 안나옴
 
     const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -112,8 +115,29 @@ const CandleStickChartDemo2: React.FC<Props> = ({
 
     chartGroup.append("g").call(yAxis); // y축은 왼쪽
 
+    //마우스 오버시 가격 툴팁
+
+    let tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = d3.select(".d3-tooltip");
+
+    if (tooltip.empty()) {
+      tooltip = d3
+        .select("body")
+        .append("div")
+        .attr("class", "d3-tooltip")
+        .style("position", "fixed")
+        .style("visibility", "hidden")
+        .style("background", "#fff")
+        .style("border", "1px solid #ccc")
+        .style("padding", "6px")
+        .style("border-radius", "4px")
+        .style("font-size", "12px")
+        .style("pointer-events", "none")
+        .style("z-index", "99999")
+        .style("box-shadow", "0px 2px 10px rgba(0, 0, 0, 0.2)");
+    }
+
     // 캔들 모양 만들기
-    data.forEach((d) => {
+    data.forEach((d, i) => {
       const key =
         candleLength === "daily"
           ? d.candle_date_time_kst.slice(0, 10)
@@ -134,11 +158,44 @@ const CandleStickChartDemo2: React.FC<Props> = ({
       const color = d.trade_price > d.opening_price ? "#ff0000" : "#0080ff";
       chartGroup
         .append("rect")
+
         .attr("x", x)
         .attr("y", candleTop)
         .attr("width", xScale.bandwidth())
         .attr("height", candleHeight)
         .attr("fill", color);
+
+      chartGroup
+        .append("rect")
+        .attr("width", totalChartWidth)
+        .attr("height", chartHeight)
+        .attr("fill", "transparent")
+
+        .on("mousemove", function (event: MouseEvent) {
+          const [x] = d3.pointer(event);
+          const index = data.length - 1 - Math.floor(x / barWidth); // barWidth 기반으로 인덱스 추정
+          const candle = data[index];
+          if (!candle) return;
+
+          const key = candle.candle_date_time_kst.slice(0, 10);
+          console.log("🔥 mouseover 발생"); // ← 이거 추가해봐
+          tooltip
+            .style("visibility", "visible")
+            .style("top", `${event.pageY - 50}px`)
+            .style("left", `${event.pageX + 15}px`).html(`
+              <strong>날짜:</strong> ${key}<br/>
+           <strong>시가:</strong> ${candle.opening_price}<br/>
+  <strong>종가:</strong> ${candle.trade_price}<br/>
+  <strong>고가:</strong> ${candle.high_price}<br/>
+  <strong>저가:</strong> ${candle.low_price}
+            `);
+        })
+        // .on("mousemove", function (event: MouseEvent) {
+        //   tooltip.style("top", `${event.pageY - 50}px`).style("left", `${event.pageX + 15}px`);
+        // })
+        .on("mouseout", function () {
+          tooltip.style("visibility", "hidden");
+        });
     });
     console.log("xScale 도메인", xScale.domain());
   }, [data, candleLength]);
@@ -153,20 +210,11 @@ const CandleStickChartDemo2: React.FC<Props> = ({
     }
   };
 
-  // useEffect(() => {
-  //   if (scrollWrapperRef.current) {
-  //     scrollWrapperRef.current.scrollLeft = scrollWrapperRef.current.scrollWidth;
-  //   }
-  // }, [data.length]);
-
-  // useEffect(() => {
-  //   if (!scrollContainerRef.current) return;
-  //   scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
-  // }, [data]);
   useEffect(() => {
     if (!scrollContainerRef.current) return;
     scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
   }, [data]);
+
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -214,12 +262,13 @@ const CandleStickChartDemo2: React.FC<Props> = ({
       container.removeEventListener("mouseleave", onMouseUp);
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
   return (
     <div
       // ref={scrollWrapperRef}
       ref={scrollContainerRef}
       onScroll={handleScroll}
-      style={{ overflowX: "auto", width: "900px" }}
+      style={{ overflowX: "auto", width: "900px", cursor: "grab" }}
     >
       <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
         <svg ref={svgForChart}></svg>
