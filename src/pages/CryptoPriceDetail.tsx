@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -62,6 +62,11 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
   // useEffect(() => {
   //   console.log("API 응답 데이터:", data);
   // }, [data]);
+  const handleChangeCrypto = () => {
+    if (setWhichCrypto) {
+      setWhichCrypto(whichCrypto === "KRW-BTC" ? "KRW-ETH" : "KRW-BTC");
+    }
+  };
 
   return (
     <div>
@@ -69,6 +74,7 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
         <CommonModal
           title={
             <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
+              <Button onClick={handleChangeCrypto}>{"<"}</Button>
               <img
                 height={25}
                 width={25}
@@ -77,6 +83,7 @@ const CryptoPriceDetail: React.FC<CryptoDetailPopUpStatus> = ({
               />
               {/* 타이틀과 이미지 정렬 */}
               {whichCrypto === "KRW-BTC" ? "BTC" : "ETH"}
+              <Button onClick={handleChangeCrypto}>{">"}</Button>
             </Box>
           }
           type="non-click"

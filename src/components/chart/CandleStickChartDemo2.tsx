@@ -25,6 +25,8 @@ const CandleStickChartDemo2: React.FC<Props> = ({
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
   const VISIBLE_CANDLE_COUNT = 200;
   const barWidth = 4;
+  // const barWidth = candleLength === "daily" ? 4 : candleLength === "weekly?" ? 10 : 20;
+
   const totalChartWidth = data.length * barWidth;
 
   useEffect(() => {
@@ -38,7 +40,8 @@ const CandleStickChartDemo2: React.FC<Props> = ({
     const chartHeight = 400 - margin.top - margin.bottom;
 
     const VISIBLE_CANDLE_COUNT = 200;
-    const barWidth = 4;
+    const barWidth =
+      candleLength === "weekly" ? 10 : candleLength === "monthly" ? 20 : candleLength === "yearly" ? 30 : 4; // 일봉 기본값
 
     const visibleChartWidth = VISIBLE_CANDLE_COUNT * barWidth;
     const totalChartWidth = data.length * barWidth;
