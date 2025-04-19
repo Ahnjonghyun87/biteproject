@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
 import { UpbitCoinResponse } from "../types/upbitCoin";
+import M2price from "./M2price";
 
 interface CryptoDetailPopUpStatus {
   setIsCryptoDetailOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -58,7 +59,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
         flexDirection: "column",
         justifyContent: "center", // 👈 중앙 정렬
         alignItems: "center",
-        paddingBottom: "55vh",
+        paddingBottom: "35vh",
       }}
     >
       <Box>
@@ -90,19 +91,14 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                 <Button onClick={() => onClickPricePopUpButton(crypto.market)} variant="contained">
                   자세히보기
                 </Button>
-                {/* <Button variant="contained">차트보기</Button> */}
                 <Typography
                   component={"span"}
                   padding={2}
                   sx={{ fontSize: 36, color: crypto.change === "RISE" ? "red" : "blue" }}
                 >
                   {crypto.trade_price}
-                </Typography>
-                {/* <Typography component={"span"} sx={{ color: crypto.change === "RISE" ? "red" : "blue" }}>
-              {crypto.change}
-             </Typography> */}{" "}
+                </Typography>{" "}
                 {
-                  // <Typography component={"span"} sx={{ color: crypto.change === "RISE" ? "red" : "blue" }}>
                   <Typography
                     component={"span"}
                     sx={{
@@ -128,16 +124,12 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                     {(crypto.change_rate * 100).toFixed(2)}%
                   </Typography>
                 }
-                {/* <Typography component={"span"} padding={2} sx={{ fontSize: 18 }}>
-                  <span style={{ color: amount > 0 ? "red" : "blue" }}>
-                    {amount > 0 ? "▲" : "▼"} {Math.abs(amount)} 원 ({Math.abs(Number(rate))}%)
-                  </span>
-                </Typography> */}
               </Box>
             </Container>
           ))
         )}
       </Box>
+      <M2price />
     </Container>
   );
 };

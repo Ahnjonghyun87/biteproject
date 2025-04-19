@@ -32,6 +32,7 @@ const Main: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen, whichC
           whichCrypto={whichCrypto}
           setWhichCrypto={setWhichCrypto}
         />
+
         {/* <CryptoPriceDetail setIsCryptoDetailOpen={setIsCryptoDetailOpen} /> */}
       </Box>
     </Container>
