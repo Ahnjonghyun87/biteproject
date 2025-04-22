@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
 import { UpbitCoinResponse } from "../types/upbitCoin";
+import DollarIndex from "./DollarIndex";
+import FearAndGreed from "./FearAndGreed";
 import M2price from "./M2price";
 
 interface CryptoDetailPopUpStatus {
@@ -59,38 +61,72 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
         flexDirection: "column",
         justifyContent: "center", // 👈 중앙 정렬
         alignItems: "center",
-        paddingBottom: "35vh",
+        // paddingBottom: "20vh",
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          display: "flex", // 👈 추가!
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 4, // 아이템 간격
+          flexWrap: "wrap", // 👉 모바일 대응을 위해서 추천
+        }}
+      >
         {isPending ? (
           <div>로딩...</div>
         ) : error ? (
           <div>데이터를 불러오는 중 오류 발생!</div>
         ) : (
           data?.items?.map((crypto, index) => (
-            <Container
+            <Box
               sx={{
-                display: "inline",
-                flexDirection: "column",
-                justifyContent: "center", // 👈 중앙 정렬
+                // display: "flex",
+                // flexDirection: "column",
+                // justifyContent: "center", // 👈 중앙 정렬
+                // alignItems: "center",
+                // width: "100%",
+                display: "flex",
+                justifyContent: "center",
                 alignItems: "center",
+                gap: 4,
+                flexWrap: "wrap",
+                mt: 4,
               }}
               key={`${crypto.market}-${index}`}
             >
               {" "}
-              <img height={100} width={100} src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"} />
               <Box
                 display={"inline"}
                 justifyContent={"center"}
                 padding={5}
                 gap={4}
                 border={1}
-                sx={{ fontSize: 48, width: "100%" }}
+                sx={{
+                  width: 420,
+                  border: "1px solid #ccc",
+                  borderRadius: 2,
+                  padding: 2,
+                  textAlign: "center",
+                  boxShadow: 2,
+                }}
               >
-                <Button onClick={() => onClickPricePopUpButton(crypto.market)} variant="contained">
-                  자세히보기
-                </Button>
+                <Box
+                  display="flex"
+                  flexDirection="column" // 👈 수직 정렬!
+                  alignItems="center"
+                  gap={1}
+                >
+                  <img
+                    height={100}
+                    width={100}
+                    src={crypto.market === "KRW-BTC" ? "/images/BTC.svg" : "/images/ETH.svg"}
+                    style={{ padding: "20px" }}
+                  />
+                  <Button onClick={() => onClickPricePopUpButton(crypto.market)} variant="contained">
+                    자세히보기
+                  </Button>
+                </Box>
                 <Typography
                   component={"span"}
                   padding={2}
@@ -112,7 +148,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                               : "black",
                     }}
                   >
-                    {crypto.change_price} 원{" "}
+                    {/* {crypto.change_price} 원{" "}
                     {crypto.opening_price < crypto.trade_price
                       ? "▲"
                       : crypto.opening_price > crypto.trade_price
@@ -121,15 +157,35 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
                           ? "--"
                           : "--"}{" "}
                     {""}
+                    {(crypto.change_rate * 100).toFixed(2)}% */}
+                    {crypto.change_price.toLocaleString()}&nbsp;원&nbsp;
+                    {crypto.opening_price < crypto.trade_price
+                      ? "▲"
+                      : crypto.opening_price > crypto.trade_price
+                        ? "▼"
+                        : "--"}
+                    &nbsp;
                     {(crypto.change_rate * 100).toFixed(2)}%
                   </Typography>
                 }
               </Box>
-            </Container>
+            </Box>
           ))
         )}
       </Box>
-      <M2price />
+      <Box
+        sx={{
+          display: "flex", // 가로로 정렬
+          justifyContent: "center", // 가운데 정렬
+          alignItems: "center", // 세로 기준 정렬
+          gap: 4, // 컴포넌트 사이 간격
+          mt: 4, // 위쪽 여백
+        }}
+      >
+        <M2price />
+        <DollarIndex />
+        <FearAndGreed />
+      </Box>
     </Container>
   );
 };

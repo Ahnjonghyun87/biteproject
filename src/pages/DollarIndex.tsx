@@ -2,14 +2,14 @@ import { Box, Button, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
-import { M2SupplyResponse } from "../types/m2";
+import { DollarIndexResponse } from "../types/dollar";
 
-const M2price = () => {
-  const { data, isPending, error } = useQuery<M2SupplyResponse>({
-    queryKey: ["m2monthlySupply"],
+const DollarIndex = () => {
+  const { data, isPending, error } = useQuery<DollarIndexResponse>({
+    queryKey: ["dollarIndex"],
     queryFn: async () => {
       const response = await axios.get(
-        "https://3z1bd0vvra.execute-api.ap-northeast-1.amazonaws.com/fred-m2-api/m2data/monthly",
+        "https://6v6yorliy2.execute-api.ap-northeast-1.amazonaws.com/dollar/supply/daily",
       );
 
       return response.data;
@@ -18,7 +18,7 @@ const M2price = () => {
   });
 
   useEffect(() => {
-    console.log("m2통화량 데이터", data);
+    console.log("달러인덱스 지수", data);
   }, [data]);
 
   if (isPending) return <div>로딩중</div>;
@@ -50,10 +50,10 @@ const M2price = () => {
       </Box>
 
       <Typography variant="h6" color="green" sx={{ mt: 2 }}>
-        최신 M2 공급량
+        달러 인덱스 지수
       </Typography>
       <Typography variant="h5" color="green">
-        {Number(latest.value).toLocaleString()} (억 달러)
+        {Number(latest.value).toLocaleString()}
       </Typography>
       <Typography variant="caption" display="block" color="green">
         기준일: {latest.date}
@@ -62,4 +62,4 @@ const M2price = () => {
   );
 };
 
-export default M2price;
+export default DollarIndex;
