@@ -64,6 +64,9 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
         // paddingBottom: "20vh",
       }}
     >
+      <Box>
+        <FearAndGreed />
+      </Box>
       <Box
         sx={{
           display: "flex", // 👈 추가!
@@ -184,7 +187,6 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
       >
         <M2price />
         <DollarIndex />
-        <FearAndGreed />
       </Box>
     </Container>
   );

@@ -1,13 +1,10 @@
 export interface FearAndGreedData {
-  name: string;
-  data: [
-    {
-      value: string;
-      value_classification: string;
-      timestamp: string;
-      time_until_update: string;
-    },
-  ];
+  value: number;
+  value_classification: string;
+  timestamp: number;
+  time_until_update: string;
+  classification: string;
+  indicator: string;
 }
 
 export interface FearAndGreedResponse {
