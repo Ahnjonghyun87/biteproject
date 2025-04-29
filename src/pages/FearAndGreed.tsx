@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
@@ -34,6 +34,19 @@ const FearAndGreed = () => {
   if (error) return <div>로딩중 에러 발생</div>;
 
   if (!data || !data.items || data.items.length === 0) return <div>데이터 없음</div>;
+
+  const fearConditionText = data.items[data.items.length - 1].classification;
+
+  const classificationToKorean: { [key: string]: { text: string; color: string } } = {
+    "Extreme Fear": { text: "극단적 공포", color: "#d32f2f" },
+    Fear: { text: "공포", color: "#f44336" },
+    Neutral: { text: "중립", color: "#616161" },
+    Greed: { text: "탐욕", color: "#388e3c" },
+    "Extreme Greed": { text: "극단적 탐욕", color: "#2e7d32" },
+  };
+
+  const translatedText = classificationToKorean[fearConditionText] || fearConditionText;
+
   return (
     <Box
       sx={{
@@ -43,12 +56,17 @@ const FearAndGreed = () => {
         padding: 2,
         textAlign: "center",
         boxShadow: 2,
-        height: 50,
+        height: 100,
       }}
     >
       <Box
         sx={{
           textAlign: "center",
+          display: "flex",
+          flexDirection: "column", // 👈 세로로 쌓이게
+          alignItems: "center", // 👈 가운데 정렬
+          height: 150, // 👈 전체 높이 강제 지정
+          justifyContent: "center", // 👈 세로 가운데
         }}
       >
         <FearAndGreedStick
@@ -57,6 +75,16 @@ const FearAndGreed = () => {
           classification={data.items[data.items.length - 1].classification}
           timestamp={data.items[data.items.length - 1].timestamp}
         />
+        <Box
+          sx={{
+            mt: -1, // ✅ 차트와 텍스트 사이 여백
+          }}
+        >
+          <Typography variant="subtitle1" sx={{ color: translatedText.color, fontSize: 20 }}>
+            {/* {data?.items?.[data.items.length - 1]?.classification} */}
+            {translatedText.text}
+          </Typography>
+        </Box>
       </Box>
       {/* <div>{data?.items?.[data.items.length - 1]?.value}</div>
       <div>{data?.items?.[data.items.length - 1]?.classification}</div> */}

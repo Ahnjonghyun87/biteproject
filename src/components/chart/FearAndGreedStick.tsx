@@ -18,7 +18,7 @@ const FearAndGreedStick: React.FC<FearAndGreedProps> = ({ value, classification,
     if (!svgRef.current) return;
 
     const width = 600;
-    const height = 40;
+    const height = 50;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove(); // ✅ 초기화 (렌더링 다시할 때마다 깨끗이)
@@ -57,8 +57,8 @@ const FearAndGreedStick: React.FC<FearAndGreedProps> = ({ value, classification,
       .text(`${value}`);
   }, [value]);
   return (
-    <div style={{ marginTop: "20px" }}>
-      <svg ref={svgRef} width={600} height={100}></svg>
+    <div style={{ paddingBottom: "20px" }}>
+      <svg ref={svgRef} width={600} height={50}></svg>
     </div>
   );
 };

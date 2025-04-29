@@ -61,7 +61,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
         flexDirection: "column",
         justifyContent: "center", // 👈 중앙 정렬
         alignItems: "center",
-        // paddingBottom: "20vh",
+        paddingTop: "10vh",
       }}
     >
       <Box>
