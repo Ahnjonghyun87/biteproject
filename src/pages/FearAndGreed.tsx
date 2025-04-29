@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
@@ -47,48 +47,59 @@ const FearAndGreed = () => {
 
   const translatedText = classificationToKorean[fearConditionText] || fearConditionText;
 
+  const handleClick = () => {
+    console.log("클릭됨!");
+  };
+
   return (
-    <Box
-      sx={{
-        width: 910,
-        border: "1px solid #ccc",
-        borderRadius: 2,
-        padding: 2,
-        textAlign: "center",
-        boxShadow: 2,
-        height: 100,
-      }}
-    >
+    <Tooltip title="자세히보기" arrow>
       <Box
         sx={{
+          width: 910,
+          border: "1px solid #ccc",
+          borderRadius: 2,
+          padding: 2,
           textAlign: "center",
-          display: "flex",
-          flexDirection: "column", // 👈 세로로 쌓이게
-          alignItems: "center", // 👈 가운데 정렬
-          height: 150, // 👈 전체 높이 강제 지정
-          justifyContent: "center", // 👈 세로 가운데
+          boxShadow: 2,
+          height: 100,
+          "&:hover": {
+            // 마우스 올렸을 때 색상변화
+            cursor: "pointer", // 커서 모양 손가락
+          },
         }}
+        onClick={handleClick}
       >
-        <FearAndGreedStick
-          data={data.items}
-          value={data.items[data.items.length - 1].value}
-          classification={data.items[data.items.length - 1].classification}
-          timestamp={data.items[data.items.length - 1].timestamp}
-        />
         <Box
           sx={{
-            mt: -1, // ✅ 차트와 텍스트 사이 여백
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column", // 👈 세로로 쌓이게
+            alignItems: "center", // 👈 가운데 정렬
+            height: 150, // 👈 전체 높이 강제 지정
+            justifyContent: "center", // 👈 세로 가운데
           }}
         >
-          <Typography variant="subtitle1" sx={{ color: translatedText.color, fontSize: 20 }}>
-            {/* {data?.items?.[data.items.length - 1]?.classification} */}
-            {translatedText.text}
-          </Typography>
+          <FearAndGreedStick
+            data={data.items}
+            value={data.items[data.items.length - 1].value}
+            classification={data.items[data.items.length - 1].classification}
+            timestamp={data.items[data.items.length - 1].timestamp}
+          />
+          <Box
+            sx={{
+              mt: -1.5, // ✅ 차트와 텍스트 사이 여백
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ color: translatedText.color, fontSize: 20 }}>
+              {/* {data?.items?.[data.items.length - 1]?.classification} */}
+              {translatedText.text} {data.items[data.items.length - 1].value}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-      {/* <div>{data?.items?.[data.items.length - 1]?.value}</div>
+        {/* <div>{data?.items?.[data.items.length - 1]?.value}</div>
       <div>{data?.items?.[data.items.length - 1]?.classification}</div> */}
-    </Box>
+      </Box>
+    </Tooltip>
   );
 };
 
