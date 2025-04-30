@@ -2,10 +2,12 @@ import { Box, Tooltip, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FearAndGreedStick from "../components/chart/FearAndGreedStick";
 import { FearAndGreedResponse } from "../types/Fear";
 
 const FearAndGreed = () => {
+  const navigate = useNavigate();
   const { data, isPending, error } = useQuery<FearAndGreedResponse>({
     queryKey: ["FearAndGreed"],
     queryFn: async () => {
@@ -49,6 +51,14 @@ const FearAndGreed = () => {
 
   const handleClick = () => {
     console.log("클릭됨!");
+    navigate("/FearAndGreedDetail", {
+      state: {
+        data,
+        value: data.items[data.items.length - 1].value,
+        classification: data.items[data.items.length - 1].classification,
+        timestamp: data.items[data.items.length - 1].timestamp,
+      },
+    });
   };
 
   return (

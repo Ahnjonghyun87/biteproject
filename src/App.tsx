@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
 import CryptoPriceDetail from "./pages/CryptoPriceDetail";
+import FearAndGreedDetail from "./pages/FearAndGreedDetail";
 import Header from "./pages/Header";
 import LogIn from "./pages/LogIn";
 import Main from "./pages/Main";
@@ -35,7 +36,9 @@ function App() {
           }
         />
         <Route path="/sidebar" element={<SideBar />} />
+        <Route path="/FearAndGreedDetail" element={<FearAndGreedDetail />} />
       </Routes>
+
       {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}
       {isSignUpOpen && <SignUp setIsSignUpOpen={setIsSignUpOpen} />}
       {isCryptoDetailOpen && (
