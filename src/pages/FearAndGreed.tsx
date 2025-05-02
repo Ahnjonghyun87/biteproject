@@ -53,7 +53,7 @@ const FearAndGreed = () => {
     console.log("클릭됨!");
     navigate("/FearAndGreedDetail", {
       state: {
-        data,
+        data: data.items,
         value: data.items[data.items.length - 1].value,
         classification: data.items[data.items.length - 1].classification,
         timestamp: data.items[data.items.length - 1].timestamp,
