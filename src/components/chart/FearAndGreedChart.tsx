@@ -14,12 +14,10 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
   const svgForChart = useRef<SVGSVGElement>(null);
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
 
-  const barWidth = 4;
+  const barWidth = 25;
 
-  const VISIBLE_CANDLE_COUNT = 200;
-
-  const visibleChartWidth = VISIBLE_CANDLE_COUNT * barWidth;
-  const totalChartWidth = data.length * barWidth;
+  const visibleData = data.slice(-30);
+  const totalChartWidth = visibleData.length * barWidth;
 
   const timeStamp = data?.[data.length - 1]?.timestamp ?? 0;
 
@@ -43,13 +41,13 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
 
     const xScale = d3
       .scaleBand()
-      .domain(data.map((d) => d.timestamp.toString()))
+      .domain(visibleData.map((d) => d.timestamp.toString()))
       .range([totalChartWidth, 0])
       .padding(0.3);
 
     const yScale = d3
       .scaleLinear()
-      .domain([d3.min(data, (d) => d.value) ?? 0, d3.max(data, (d) => d.value) ?? 100])
+      .domain([d3.min(visibleData, (d) => d.value) ?? 0, d3.max(visibleData, (d) => d.value) ?? 100])
       .range([chartHeight, 0]);
 
     chartGroup
@@ -68,7 +66,7 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
   }, [data]);
 
   return (
-    <div style={{ overflowX: "auto", width: "900px", cursor: "grab" }}>
+    <div style={{ overflowX: "auto", width: "900px", cursor: "grab", placeItems: "center" }}>
       <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
         <svg ref={svgForChart}></svg>
       </div>
