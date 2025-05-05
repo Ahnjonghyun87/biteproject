@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import * as d3 from "d3";
 import React, { useEffect, useRef, useState } from "react";
 import { FearAndGreedData } from "../../types/Fear";
@@ -12,11 +12,10 @@ interface FnGProps {
 }
 
 const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, timestamp }) => {
-  const [fndCandleLength, setfndCandleLength] = useState<string>("weekly");
+  const [fndCandleLength, setFndCandleLength] = useState<string>("weekly");
+  const [fndBarWidth, setFndfndBarWidth] = useState<number>(25);
   const svgForChart = useRef<SVGSVGElement>(null);
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
-
-  const barWidth = 25;
 
   // const visibleData = (setfndCandleLength: FearAndGreedData) => {
   //   data.slice(-30);
@@ -42,7 +41,7 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
         return data.slice(-30); // fallback
     }
   };
-  const totalChartWidth = visibleData().length * barWidth;
+  const totalChartWidth = visibleData().length * fndBarWidth;
 
   const timeStamp = data?.[data.length - 1]?.timestamp ?? 0;
 
@@ -60,8 +59,40 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
   const handleChangefndCandle = (event: SelectChangeEvent) => {
     const value = event.target.value;
     console.log("🔥 선택된 값:", value);
-    setfndCandleLength(event.target.value);
+    setFndCandleLength(value);
+
+    switch (value) {
+      case "weekly":
+        setFndfndBarWidth(40);
+        break;
+      case "monthly":
+        setFndfndBarWidth(25);
+        break;
+      case "yearly":
+        setFndfndBarWidth(4);
+        break;
+      case "totally":
+        setFndfndBarWidth(4);
+        break;
+      default:
+        setFndfndBarWidth(25);
+    }
   };
+
+  const totalGreed = () => {
+    return visibleData().filter((d) => d.classification.toLowerCase().includes("greed")).length;
+  };
+  console.log("탐욕수치 합", totalGreed());
+
+  const totalFear = () => {
+    return visibleData().filter((d) => d.classification.toLowerCase().includes("fear")).length;
+  };
+  console.log("탐욕수치 합", totalFear());
+
+  const totalNeutral = () => {
+    return visibleData().filter((d) => d.classification.toLowerCase().includes("neutral")).length;
+  };
+  console.log("탐욕수치 합", totalNeutral()); // 스펠링이 natural이라고 생각하지만 여기서 데이터가 Neutral로 오고 있음.
 
   useEffect(() => {
     if (!Array.isArray(data) || data.length === 0) return;
@@ -86,19 +117,33 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
 
     const yScale = d3.scaleLinear().domain([0, 100]).range([chartHeight, 0]);
 
-    // ✅ X축 포맷: 첫 번째만 "YYYY Mon" 형식으로 표시
-    const formatMonth = d3.timeFormat("%b"); // 예: Apr
-    const formatYear = d3.timeFormat("%Y"); // 예: 2025
-    const formatDay = d3.timeFormat("%d"); // ✅ 일(day)을 숫자로 (01~31)
+    //날짜 표기
+
+    const formatYear = d3.timeFormat("%Y");
+    const formatMonth = d3.timeFormat("%b");
+    const formatDay = d3.timeFormat("%d");
 
     const xAxis = d3.axisBottom(xScale).tickFormat((d, i) => {
       const date = new Date(parseInt(d.toString()) * 1000);
-      if (i % 5 === 0) {
-        return `${formatYear(date)} ${formatMonth(date)} ${formatDay(date)}`;
-      }
-      return "";
-    }); //5일 단위만 출력하고 나머지는 x 를 빈 값으로 return
 
+      if (fndCandleLength === "yearly" || fndCandleLength === "totally") {
+        // 3개월마다 연도+월 표시
+        if (i % 90 === 0) {
+          return `${formatYear(date)} ${formatMonth(date)}`;
+        }
+        return "";
+      }
+
+      if (fndCandleLength === "weekly" || fndCandleLength === "monthly") {
+        // 5일마다 연도+월+일 표시
+        if (i % 5 === 0) {
+          return `${formatYear(date)} ${formatMonth(date)} ${formatDay(date)}`;
+        }
+        return "";
+      }
+
+      return "";
+    });
     chartGroup
 
       .selectAll("rect")
@@ -158,7 +203,7 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
       .on("mousemove", function (event: MouseEvent) {
         const [x] = d3.pointer(event);
 
-        const index = Math.floor(x / barWidth); // 좌측부터 0, 1, 2...
+        const index = Math.floor(x / fndBarWidth); // 좌측부터 0, 1, 2...
         const candle = visibleData()[index];
         if (!candle) return;
         const koreanText = classificationToKorean[candle.classification] || candle.classification;
@@ -178,30 +223,49 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
   }, [data, fndCandleLength]);
 
   return (
-    <div style={{ overflowX: "auto", width: "900px", cursor: "grab", placeItems: "center", paddingTop: 10 }}>
-      <FormControl fullWidth>
-        <InputLabel id="candle-label">캔들선택</InputLabel>
-        <Select
-          labelId="candle-label"
-          id="candle-select"
-          value={fndCandleLength}
-          label="캔들선택"
-          onChange={handleChangefndCandle}
-          onOpen={() => console.log("드롭다운 열림")}
-          onClose={() => console.log("드롭다운 닫힘")}
-          size="small"
-          sx={{ width: 120 }}
-        >
-          <MenuItem value="weekly">일주일</MenuItem>
-          <MenuItem value="monthly">한달간</MenuItem>
-          <MenuItem value="yearly">일년간</MenuItem>
-          <MenuItem value="totally">전부</MenuItem>
-        </Select>
-      </FormControl>
-      <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
-        <svg ref={svgForChart}></svg>
+    <Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <FormControl fullWidth>
+          <InputLabel id="candle-label">캔들선택</InputLabel>
+          <Select
+            labelId="candle-label"
+            id="candle-select"
+            value={fndCandleLength}
+            label="캔들선택"
+            onChange={handleChangefndCandle}
+            onOpen={() => console.log("드롭다운 열림")}
+            onClose={() => console.log("드롭다운 닫힘")}
+            size="small"
+            sx={{ width: 120 }}
+          >
+            <MenuItem value="weekly">일주일</MenuItem>
+            <MenuItem value="monthly">한달간</MenuItem>
+            <MenuItem value="yearly">일년간</MenuItem>
+            <MenuItem value="totally">전부</MenuItem>
+          </Select>
+        </FormControl>
+        <Box width={100}>
+          <Typography>탐욕의 날:{totalGreed()}</Typography>
+          <Typography>중립의 날:{totalNeutral()}</Typography>
+          <Typography>공포의 날:{totalFear()}</Typography>
+        </Box>
+      </Box>
+      <div style={{ width: "900px", overflowX: "auto", paddingTop: 10 }}>
+        <svg
+          ref={svgForChart}
+          style={{
+            display: "block",
+            marginLeft: 0,
+          }}
+        ></svg>
       </div>
-    </div>
+
+      {/* <div style={{ overflowX: "auto", width: "900px", cursor: "grab", placeItems: "center", paddingTop: 10 }}>
+        <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
+          <svg ref={svgForChart}></svg>
+        </div>
+      </div> */}
+    </Box>
   );
 };
 
