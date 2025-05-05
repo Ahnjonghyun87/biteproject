@@ -38,7 +38,7 @@ const FearAndGreedDetail = () => {
         display: "flex", // ✅ flex 정렬
         justifyContent: "center", // ✅ 수평 중앙
         alignItems: "center", // ✅ 수직 중앙 (height가 있을 때)
-        height: 350, // ✅ 높이 설정
+        height: 400, // ✅ 높이 설정
         marginTop: 55,
       }}
     >
