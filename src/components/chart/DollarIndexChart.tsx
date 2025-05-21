@@ -9,7 +9,7 @@ interface DiProps {
 
 const DollarIndexChart = ({ data }: DiProps) => {
   const [diCandleLength, setdiCandleLength] = useState<string>("monthly");
-  const [diBarWidth, setdiBarWidth] = useState<number>(25);
+  const [diBarWidth, setDiBarWidth] = useState<number>(25);
   const svgForChart = useRef<SVGSVGElement>(null);
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
 
@@ -38,16 +38,16 @@ const DollarIndexChart = ({ data }: DiProps) => {
 
     switch (value) {
       case "monthly":
-        setdiBarWidth(25);
+        setDiBarWidth(25);
         break;
       case "yearly":
-        setdiBarWidth(4);
+        setDiBarWidth(4);
         break;
       case "totally":
-        setdiBarWidth(4);
+        setDiBarWidth(4);
         break;
       default:
-        setdiBarWidth(25);
+        setDiBarWidth(25);
     }
   };
   useEffect(() => {
@@ -69,7 +69,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
       .range([0, totalChartWidth])
       .padding(0.3);
 
-    const yScale = d3.scaleLinear().domain([0, 100]).range([chartHeight, 0]);
+    const yScale = d3.scaleLinear().domain([0, 200]).range([chartHeight, 0]);
 
     //날짜 표기
 
@@ -78,7 +78,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
     const formatDay = d3.timeFormat("%d");
 
     const xAxis = d3.axisBottom(xScale).tickFormat((d, i) => {
-      const date = new Date(parseInt(d.toString()) * 1000);
+      const date = new Date(d as string); //공탐지수랑은 다르게 fed 데이터는 date가 숫자임. 변환을 toString으로 안해줘도 됨. 하게되면 표기잘못됨
 
       if (diCandleLength === "yearly" || diCandleLength === "totally") {
         // 3개월마다 연도+월 표시
@@ -161,7 +161,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, [data]);
+  }, [data, visibleData]);
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
