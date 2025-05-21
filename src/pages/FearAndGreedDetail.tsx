@@ -39,18 +39,18 @@ const FearAndGreedDetail = () => {
         justifyContent: "center", // ✅ 수평 중앙
         alignItems: "center", // ✅ 수직 중앙 (height가 있을 때)
         height: 400, // ✅ 높이 설정
-        marginTop: 55,
+        marginTop: 65,
       }}
     >
       <Box
         sx={{
-          width: 910,
+          width: 960,
           border: "1px solid #ccc",
           borderRadius: 2,
           padding: 2,
           textAlign: "center",
           boxShadow: 2,
-          height: 700,
+          height: 800,
           paddingTop: 40,
         }}
       >

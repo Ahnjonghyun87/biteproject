@@ -1,33 +1,20 @@
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import * as d3 from "d3";
-import React, { useEffect, useRef, useState } from "react";
-import { FearAndGreedData } from "../../types/Fear";
+import { useEffect, useRef, useState } from "react";
+import { DollarIndex } from "../../types/dollar";
 
-interface FnGProps {
-  data: FearAndGreedData[];
-
-  value: string;
-  classification: string;
-  timestamp: string;
+interface DiProps {
+  data: DollarIndex[];
 }
 
-const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, timestamp }) => {
-  const [fndCandleLength, setFndCandleLength] = useState<string>("weekly");
-  const [fndBarWidth, setFndfndBarWidth] = useState<number>(25);
+const DollarIndexChart = ({ data }: DiProps) => {
+  const [diCandleLength, setdiCandleLength] = useState<string>("monthly");
+  const [diBarWidth, setdiBarWidth] = useState<number>(25);
   const svgForChart = useRef<SVGSVGElement>(null);
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
 
-  // const visibleData = (setfndCandleLength: FearAndGreedData) => {
-  //   data.slice(-30);
-  // };
-
-  // const visibleData = data.slice(-30);
-
   const visibleData = () => {
-    switch (fndCandleLength) {
-      case "weekly":
-        return data.slice(-7);
-
+    switch (diCandleLength) {
       case "monthly":
         return data.slice(-30);
 
@@ -41,62 +28,30 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
         return data.slice(-30); // fallback
     }
   };
-  const totalChartWidth = visibleData().length * fndBarWidth;
 
-  const timeStamp = data?.[data.length - 1]?.timestamp ?? 0;
+  const totalChartWidth = visibleData().length * diBarWidth;
 
-  const date = new Date(timeStamp * 1000);
-  const KstTime = date.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
-
-  const classificationToKorean: { [key: string]: string } = {
-    "Extreme Fear": "극단적 공포",
-    Fear: "공포",
-    Neutral: "중립",
-    Greed: "탐욕",
-    "Extreme Greed": "극단적 탐욕",
-  };
-
-  const handleChangefndCandle = (event: SelectChangeEvent) => {
+  const handleChangeDiCandle = (event: SelectChangeEvent) => {
     const value = event.target.value;
     console.log("🔥 선택된 값:", value);
-    setFndCandleLength(value);
+    setdiCandleLength(value);
 
     switch (value) {
-      case "weekly":
-        setFndfndBarWidth(40);
-        break;
       case "monthly":
-        setFndfndBarWidth(25);
+        setdiBarWidth(25);
         break;
       case "yearly":
-        setFndfndBarWidth(4);
+        setdiBarWidth(4);
         break;
       case "totally":
-        setFndfndBarWidth(4);
+        setdiBarWidth(4);
         break;
       default:
-        setFndfndBarWidth(25);
+        setdiBarWidth(25);
     }
   };
-
-  const totalGreed = () => {
-    return visibleData().filter((d) => d.classification.toLowerCase().includes("greed")).length;
-  };
-  console.log("탐욕수치 합", totalGreed());
-
-  const totalFear = () => {
-    return visibleData().filter((d) => d.classification.toLowerCase().includes("fear")).length;
-  };
-  console.log("탐욕수치 합", totalFear());
-
-  const totalNeutral = () => {
-    return visibleData().filter((d) => d.classification.toLowerCase().includes("neutral")).length;
-  };
-  console.log("탐욕수치 합", totalNeutral()); // 스펠링이 natural이라고 생각하지만 여기서 데이터가 Neutral로 오고 있음.
-
   useEffect(() => {
     if (!Array.isArray(data) || data.length === 0) return;
-
     const svg = d3.select(svgForChart.current);
     svg.selectAll("*").remove();
 
@@ -106,12 +61,11 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
       .attr("width", totalChartWidth + margin.left + margin.right)
       .attr("height", 400)
       .style("border", "1px solid #ccc");
-
     const chartGroup = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     const xScale = d3
       .scaleBand()
-      .domain(visibleData().map((d) => d.timestamp.toString()))
+      .domain(visibleData().map((d) => d.date.toString()))
       .range([0, totalChartWidth])
       .padding(0.3);
 
@@ -126,7 +80,7 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
     const xAxis = d3.axisBottom(xScale).tickFormat((d, i) => {
       const date = new Date(parseInt(d.toString()) * 1000);
 
-      if (fndCandleLength === "yearly" || fndCandleLength === "totally") {
+      if (diCandleLength === "yearly" || diCandleLength === "totally") {
         // 3개월마다 연도+월 표시
         if (i % 90 === 0) {
           return `${formatYear(date)} ${formatMonth(date)}`;
@@ -134,7 +88,7 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
         return "";
       }
 
-      if (fndCandleLength === "weekly" || fndCandleLength === "monthly") {
+      if (diCandleLength === "weekly" || diCandleLength === "monthly") {
         // 5일마다 연도+월+일 표시
         if (i % 5 === 0) {
           return `${formatYear(date)} ${formatMonth(date)} ${formatDay(date)}`;
@@ -150,30 +104,18 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
       .data(visibleData)
       .enter()
       .append("rect")
-      .attr("x", (d) => xScale(d.timestamp.toString())!)
+      .attr("x", (d) => xScale(d.date.toString())!)
       .attr("y", (d) => yScale(d.value))
       .attr("width", xScale.bandwidth())
       .attr("height", (d) => {
         const h = chartHeight - yScale(d.value);
         return h > 0 ? h : 0; // ✅ 음수 방지
-      })
-      .attr("fill", (d) => {
-        const classification = d.classification.toLowerCase(); // 예: "greed"
-        if (classification.includes("extreme fear")) return "#d32f2f";
-        if (classification.includes("fear")) return "#f44336";
-        if (classification.includes("neutral")) return "#616161";
-        if (classification.includes("greed")) return "#388e3c";
-        if (classification.includes("extreme greed")) return "#2e7d32";
-        return "#ccc"; // 기본값
       });
 
     chartGroup.append("g").attr("transform", `translate(0, ${chartHeight})`).call(xAxis);
 
     // ✅ Y축
     chartGroup.append("g").call(d3.axisLeft(yScale));
-
-    // chartGroup.append("g").attr("transform", `translate(0, ${chartHeight})`).call(d3.axisBottom(xScale));
-    // chartGroup.append("g").call(d3.axisLeft(yScale));
 
     //툴팁
     let tooltip: d3.Selection<HTMLDivElement, unknown, HTMLElement, any> = d3.select(".d3-tooltip");
@@ -203,25 +145,23 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
       .on("mousemove", function (event: MouseEvent) {
         const [x] = d3.pointer(event);
 
-        const index = Math.floor(x / fndBarWidth); // 좌측부터 0, 1, 2...
+        const index = Math.floor(x / diBarWidth); // 좌측부터 0, 1, 2...
         const candle = visibleData()[index];
         if (!candle) return;
-        const koreanText = classificationToKorean[candle.classification] || candle.classification;
 
         tooltip
           .style("visibility", "visible")
           .style("top", `${event.pageY - 50}px`)
           .style("left", `${event.pageX + 15}px`).html(`
-        <strong>날짜:</strong> ${new Date(candle.timestamp * 1000).toLocaleDateString("ko-KR")}<br/>
-        <strong>공탐지수:</strong> ${candle.value}<br/>
-        <strong>공탐척도:</strong> ${koreanText}
-      `);
+            <strong>날짜:</strong> ${candle.date}<br/>
+            <strong>달러 인덱스 지수:</strong> ${candle.value}<br/>
+       
+          `);
       })
       .on("mouseout", function () {
         tooltip.style("visibility", "hidden");
       });
-  }, [data, fndCandleLength]);
-
+  }, [data]);
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -230,25 +170,20 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
           <Select
             labelId="candle-label"
             id="candle-select"
-            value={fndCandleLength}
+            value={diCandleLength}
             label="캔들선택"
-            onChange={handleChangefndCandle}
+            onChange={handleChangeDiCandle}
             onOpen={() => console.log("드롭다운 열림")}
             onClose={() => console.log("드롭다운 닫힘")}
             size="small"
             sx={{ width: 120 }}
           >
-            <MenuItem value="weekly">일주일</MenuItem>
             <MenuItem value="monthly">한달간</MenuItem>
             <MenuItem value="yearly">일년간</MenuItem>
             <MenuItem value="totally">전부</MenuItem>
           </Select>
         </FormControl>
-        <Box width={300}>
-          <Typography>탐욕의 날:{totalGreed()}</Typography>
-          <Typography>중립의 날:{totalNeutral()}</Typography>
-          <Typography>공포의 날:{totalFear()}</Typography>
-        </Box>
+        <Box width={300}></Box>
       </Box>
       <div style={{ width: "900px", overflowX: "auto", paddingTop: 10 }}>
         <svg
@@ -259,14 +194,8 @@ const FearAndGreedChart: React.FC<FnGProps> = ({ data, value, classification, ti
           }}
         ></svg>
       </div>
-
-      {/* <div style={{ overflowX: "auto", width: "900px", cursor: "grab", placeItems: "center", paddingTop: 10 }}>
-        <div style={{ width: `${totalChartWidth + margin.left + margin.right}px` }}>
-          <svg ref={svgForChart}></svg>
-        </div>
-      </div> */}
     </Box>
   );
 };
 
-export default FearAndGreedChart;
+export default DollarIndexChart;

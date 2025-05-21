@@ -2,9 +2,11 @@ import { Box, Button, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { M2SupplyResponse } from "../types/m2";
 
 const M2price = () => {
+  const navigate = useNavigate();
   const { data, isPending, error } = useQuery<M2SupplyResponse>({
     queryKey: ["m2monthlySupply"],
     queryFn: async () => {
@@ -28,6 +30,11 @@ const M2price = () => {
   if (!data || !data.items || data.items.length === 0) return <div>데이터 없음</div>;
 
   const latest = data.items[data.items.length - 1];
+
+  const handleClick = () => {
+    console.log("클릭됨!");
+    navigate("/m2Detail", {});
+  };
   return (
     <Box
       sx={{
@@ -37,7 +44,12 @@ const M2price = () => {
         padding: 2,
         textAlign: "center",
         boxShadow: 2,
+        "&:hover": {
+          // 마우스 올렸을 때 색상변화
+          cursor: "pointer", // 커서 모양 손가락
+        },
       }}
+      onClick={handleClick}
     >
       <Box
         display="flex"

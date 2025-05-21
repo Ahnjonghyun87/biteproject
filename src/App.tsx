@@ -3,9 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
 import CryptoPriceDetail from "./pages/CryptoPriceDetail";
+import DollarIndexDetail from "./pages/DollarIndexDetail";
 import FearAndGreedDetail from "./pages/FearAndGreedDetail";
 import Header from "./pages/Header";
 import LogIn from "./pages/LogIn";
+import M2Detail from "./pages/M2Detail";
 import Main from "./pages/Main";
 import SignUp from "./pages/SignUp";
 import "./reset.css";
@@ -36,7 +38,9 @@ function App() {
           }
         />
         <Route path="/sidebar" element={<SideBar />} />
-        <Route path="/FearAndGreedDetail" element={<FearAndGreedDetail />} />
+        <Route path="/fngDetail" element={<FearAndGreedDetail />} />
+        <Route path="/m2Detail" element={<M2Detail />} />
+        <Route path="/dIndexDetail" element={<DollarIndexDetail />} />
       </Routes>
 
       {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}

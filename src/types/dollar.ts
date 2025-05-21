@@ -1,6 +1,6 @@
 export interface DollarIndex {
   date: string;
-  value: string;
+  value: number;
 }
 
 export interface DollarIndexResponse {

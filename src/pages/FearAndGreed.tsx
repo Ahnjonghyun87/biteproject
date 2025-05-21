@@ -51,7 +51,7 @@ const FearAndGreed = () => {
 
   const handleClick = () => {
     console.log("클릭됨!");
-    navigate("/FearAndGreedDetail", {
+    navigate("/fngDetail", {
       state: {
         data: data.items,
         value: data.items[data.items.length - 1].value,
