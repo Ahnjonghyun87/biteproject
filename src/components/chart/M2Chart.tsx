@@ -1,20 +1,21 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { DollarIndex } from "../../types/dollar";
 
-interface DiProps {
-  data: DollarIndex[];
+import { M2Supply } from "../../types/m2";
+
+interface M2Props {
+  data: M2Supply[];
 }
 
-const DollarIndexChart = ({ data }: DiProps) => {
-  const [diCandleLength, setdiCandleLength] = useState<string>("monthly");
-  const [diBarWidth, setDiBarWidth] = useState<number>(25);
+const M2Chart = ({ data }: M2Props) => {
+  const [m2CandleLength, setM2CandleLength] = useState<string>("monthly");
+  const [m2BarWidth, setM2BarWidth] = useState<number>(25);
   const svgForChart = useRef<SVGSVGElement>(null);
   const margin = { top: 20, right: 60, bottom: 30, left: 60 };
 
   const visibleData = () => {
-    switch (diCandleLength) {
+    switch (m2CandleLength) {
       case "monthly":
         return data.slice(-30);
 
@@ -29,25 +30,25 @@ const DollarIndexChart = ({ data }: DiProps) => {
     }
   };
 
-  const totalChartWidth = visibleData().length * diBarWidth;
+  const totalChartWidth = visibleData().length * m2BarWidth;
 
   const handleChangeDiCandle = (event: SelectChangeEvent) => {
     const value = event.target.value;
     console.log("🔥 선택된 값:", value);
-    setdiCandleLength(value);
+    setM2CandleLength(value);
 
     switch (value) {
       case "monthly":
-        setDiBarWidth(25);
+        setM2BarWidth(25);
         break;
       case "yearly":
-        setDiBarWidth(4);
+        setM2BarWidth(4);
         break;
       case "totally":
-        setDiBarWidth(4);
+        setM2BarWidth(4);
         break;
       default:
-        setDiBarWidth(25);
+        setM2BarWidth(25);
     }
   };
   useEffect(() => {
@@ -69,7 +70,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
       .range([0, totalChartWidth])
       .padding(0.3);
 
-    const yScale = d3.scaleLinear().domain([0, 200]).range([chartHeight, 0]);
+    const yScale = d3.scaleLinear().domain([0, 30000]).range([chartHeight, 0]);
 
     //날짜 표기
 
@@ -80,7 +81,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
     const xAxis = d3.axisBottom(xScale).tickFormat((d, i) => {
       const date = new Date(d as string); //공탐지수랑은 다르게 fed 데이터는 date가 숫자임. 변환을 toString으로 안해줘도 됨. 하게되면 표기잘못됨
 
-      if (diCandleLength === "yearly" || diCandleLength === "totally") {
+      if (m2CandleLength === "yearly" || m2CandleLength === "totally") {
         // 3개월마다 연도+월 표시
         if (i % 90 === 0) {
           return `${formatYear(date)} ${formatMonth(date)}`;
@@ -88,7 +89,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
         return "";
       }
 
-      if (diCandleLength === "weekly" || diCandleLength === "monthly") {
+      if (m2CandleLength === "weekly" || m2CandleLength === "monthly") {
         // 5일마다 연도+월+일 표시
         if (i % 5 === 0) {
           return `${formatYear(date)} ${formatMonth(date)} ${formatDay(date)}`;
@@ -148,7 +149,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
       .on("mousemove", function (event: MouseEvent) {
         const [x] = d3.pointer(event);
 
-        const index = Math.floor(x / diBarWidth); // 좌측부터 0, 1, 2...
+        const index = Math.floor(x / m2BarWidth); // 좌측부터 0, 1, 2...
         const candle = visibleData()[index];
         if (!candle) return;
 
@@ -157,8 +158,8 @@ const DollarIndexChart = ({ data }: DiProps) => {
           .style("top", `${event.pageY - 50}px`)
           .style("left", `${event.pageX + 15}px`).html(`
             <strong>날짜:</strong> ${candle.date}<br/>
-            <strong>달러 인덱스 지수:</strong> ${candle.value}<br/>
-       
+            <strong>m2 지수:</strong> ${candle.value}<br/>
+
           `);
       })
       .on("mouseout", function () {
@@ -173,7 +174,7 @@ const DollarIndexChart = ({ data }: DiProps) => {
           <Select
             labelId="candle-label"
             id="candle-select"
-            value={diCandleLength}
+            value={m2CandleLength}
             label="캔들선택"
             onChange={handleChangeDiCandle}
             onOpen={() => console.log("드롭다운 열림")}
@@ -201,4 +202,4 @@ const DollarIndexChart = ({ data }: DiProps) => {
   );
 };
 
-export default DollarIndexChart;
+export default M2Chart;

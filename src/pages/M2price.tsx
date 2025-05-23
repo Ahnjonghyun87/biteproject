@@ -33,7 +33,9 @@ const M2price = () => {
 
   const handleClick = () => {
     console.log("클릭됨!");
-    navigate("/m2Detail", {});
+    navigate("/m2Detail", {
+      state: data.items,
+    });
   };
   return (
     <Box

@@ -1,6 +1,7 @@
 export interface M2Supply {
   date: string;
-  value: string;
+  value: number;
+  indicator: string;
 }
 
 export interface M2SupplyResponse {
