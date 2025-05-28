@@ -1,4 +1,5 @@
-import { AppBar, Box, Container, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import LoginSignUpCognito from "./LoginSignUpCognito";
 // import "./Header.css";
 
@@ -8,15 +9,24 @@ interface LoginModalStatus {
 }
 
 const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen }) => {
-  const handleMoveLogin = () => {
-    setIsLoginOpen(true);
+  const navigate = useNavigate();
+
+  const handleMoveAllCrypto = () => {
+    navigate("/allCrypto");
   };
 
-  const handleMoveSignUp = () => {
-    setIsSignUpOpen(true);
+  const handleMoveMain = () => {
+    navigate("/");
   };
+  // const handleMoveLogin = () => {
+  //   setIsLoginOpen(true);
+  // };
 
-  const handleLogOut = () => {};
+  // const handleMoveSignUp = () => {
+  //   setIsSignUpOpen(true);
+  // };
+
+  // const handleLogOut = () => {};
 
   return (
     <AppBar
@@ -34,9 +44,20 @@ const Header: React.FC<LoginModalStatus> = ({ setIsLoginOpen, setIsSignUpOpen })
         maxWidth="lg"
         sx={{ display: "flex", justifyContent: "space-between", height: 100, alignItems: "center" }}
       >
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          비트코인-이더리움 앱
-        </Typography>
+        <Box sx={{ justifyContent: "flex-start", display: "flex", gap: 2 }}>
+          <Button onClick={handleMoveMain} variant="contained" sx={{ color: "white" }}>
+            메인
+          </Button>
+          <Button onClick={handleMoveAllCrypto} variant="contained" sx={{ color: "white" }}>
+            코인가격정보
+          </Button>
+        </Box>
+        <Box>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            비트코인-이더리움 앱
+          </Typography>
+        </Box>
+
         <Box sx={{ display: "flex", gap: 2 }}>
           <LoginSignUpCognito></LoginSignUpCognito>
 

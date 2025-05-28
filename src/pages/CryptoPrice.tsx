@@ -25,6 +25,7 @@ const CryptoPrice: React.FC<CryptoDetailPopUpStatus> = ({ setIsCryptoDetailOpen,
       return response.data ?? { items: [] };
     },
     staleTime: 1000,
+    refetchOnMount: true,
   });
 
   // const [whichCrypto, setWhichCrypto] = useState<String>("");

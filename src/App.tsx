@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
+import AllCrypto from "./pages/AllCrypto";
 import CryptoPriceDetail from "./pages/CryptoPriceDetail";
 import DollarIndexDetail from "./pages/DollarIndexDetail";
 import FearAndGreedDetail from "./pages/FearAndGreedDetail";
@@ -41,6 +42,7 @@ function App() {
         <Route path="/fngDetail" element={<FearAndGreedDetail />} />
         <Route path="/m2Detail" element={<M2Detail />} />
         <Route path="/dIndexDetail" element={<DollarIndexDetail />} />
+        <Route path="/allCrypto" element={<AllCrypto />} />
       </Routes>
 
       {isLoginOpen && <LogIn setIsLoginOpen={setIsLoginOpen} />}
