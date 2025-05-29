@@ -1,20 +1,65 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const AllCrypto = () => {
+  const [price, setPrice] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    let socket: WebSocket;
+
+    const fetchAndSubscribe = async () => {
+      // 1. 전체 마켓 목록 가져오기
+      const res = await fetch("https://api.upbit.com/v1/market/all");
+      const data = await res.json();
+
+      // 2. KRW- 마켓만 필터링
+      const krwMarkets = data
+        .filter((m: { market: string }) => m.market.startsWith("KRW-"))
+        .map((m: { market: string }) => m.market);
+
+      // 3. WebSocket 연결
+      socket = new WebSocket("wss://api.upbit.com/websocket/v1");
+
+      socket.onopen = () => {
+        socket.send(JSON.stringify([{ ticket: "all-krw-tickers" }, { type: "ticker", codes: krwMarkets }]));
+      };
+
+      socket.onmessage = (event) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const json = JSON.parse(reader.result as string);
+          setPrice((prev) => ({
+            ...prev,
+            [json.code]: json.trade_price,
+          }));
+        };
+        reader.readAsText(event.data);
+      };
+    };
+
+    fetchAndSubscribe();
+
+    return () => {
+      if (socket) socket.close();
+    };
+  }, []);
+
   return (
     <Container
-      maxWidth={"xl"}
+      maxWidth="xl"
       sx={{
-        minHeight: "100vh", // 👈 최소 높이 설정
+        minHeight: "100vh",
         backgroundColor: "white",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // 👈 중앙 정렬
+        justifyContent: "center",
         alignItems: "center",
         paddingTop: "10vh",
       }}
     >
-      거래소
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        거래소
+      </Typography>
       <Box
         sx={{
           width: "100%",
@@ -22,11 +67,17 @@ const AllCrypto = () => {
           borderRadius: "10px",
           color: "gray",
           border: 1,
-          placeItems: "center",
           display: "grid",
+          placeItems: "center",
         }}
       >
-        Test
+        {Object.entries(price)
+          // .slice(0, 5)
+          .map(([code, value]) => (
+            <Typography key={code}>
+              {code}: {value.toLocaleString()} 원
+            </Typography>
+          ))}
       </Box>
     </Container>
   );
