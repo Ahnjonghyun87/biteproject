@@ -91,6 +91,8 @@ const AllCrypto = () => {
     };
   }, []);
 
+  const onClickCrypto = () => {};
+
   return (
     <Container
       maxWidth="xl"
@@ -122,10 +124,14 @@ const AllCrypto = () => {
           // .slice(0, 5)
           .map(([code, value]) => (
             <Box sx={{ display: "flex", placeItems: "center", gap: 5, color: "black" }}>
-              <Typography key={code}>
+              <Typography
+                key={code}
+                sx={{ cursor: "pointer", "&:hover": { textDecoration: "underline", backgroundColor: "orange" } }}
+                onClick={onClickCrypto}
+              >
                 {code}: {value.trade_price.toLocaleString()} 원
               </Typography>
-              <Typography key={code}>
+              <Typography>
                 <span
                   style={{
                     color:
@@ -142,7 +148,7 @@ const AllCrypto = () => {
                 </span>
               </Typography>
 
-              <Typography key={code}>{value.acc_trade_price_24h.toLocaleString()} 원</Typography>
+              <Typography>{value.acc_trade_price_24h.toLocaleString()} 원</Typography>
             </Box>
           ))}
       </Box>
