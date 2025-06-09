@@ -1,9 +1,56 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const AllCrypto = () => {
-  const [price, setPrice] = useState<Record<string, number>>({});
+interface CoinTickerData {
+  type: "ticker";
+  code: string; // 마켓 코드 (e.g., KRW-BTC)
 
+  opening_price: number;
+  high_price: number;
+  low_price: number;
+  trade_price: number;
+  prev_closing_price: number;
+
+  change: "RISE" | "EVEN" | "FALL";
+  change_price: number;
+  signed_change_price: number;
+  change_rate: number;
+  signed_change_rate: number;
+
+  trade_volume: number;
+  acc_trade_volume: number;
+  acc_trade_volume_24h: number;
+  acc_trade_price: number;
+  acc_trade_price_24h: number;
+
+  trade_date: string; // yyyyMMdd
+  trade_time: string; // HHmmss
+  trade_timestamp: number;
+
+  ask_bid: "ASK" | "BID";
+
+  acc_ask_volume: number;
+  acc_bid_volume: number;
+
+  highest_52_week_price: number;
+  highest_52_week_date: string; // yyyy-MM-dd
+  lowest_52_week_price: number;
+  lowest_52_week_date: string; // yyyy-MM-dd
+
+  trade_status?: string; // deprecated
+  market_state: "PREVIEW" | "ACTIVE" | "DELISTED";
+  market_state_for_ios?: string; // deprecated
+  is_trading_suspended?: boolean; // deprecated
+  delisting_date?: string; // optional
+
+  market_warning: "NONE" | "CAUTION";
+
+  timestamp: number;
+  stream_type: "SNAPSHOT" | "REALTIME";
+}
+
+const AllCrypto = () => {
+  const [price, setPrice] = useState<Record<string, CoinTickerData>>({});
   useEffect(() => {
     let socket: WebSocket;
 
@@ -30,7 +77,7 @@ const AllCrypto = () => {
           const json = JSON.parse(reader.result as string);
           setPrice((prev) => ({
             ...prev,
-            [json.code]: json.trade_price,
+            [json.code]: json,
           }));
         };
         reader.readAsText(event.data);
@@ -54,7 +101,7 @@ const AllCrypto = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        paddingTop: "10vh",
+        paddingTop: "14vh",
       }}
     >
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -74,9 +121,29 @@ const AllCrypto = () => {
         {Object.entries(price)
           // .slice(0, 5)
           .map(([code, value]) => (
-            <Typography key={code}>
-              {code}: {value.toLocaleString()} 원
-            </Typography>
+            <Box sx={{ display: "flex", placeItems: "center", gap: 5, color: "black" }}>
+              <Typography key={code}>
+                {code}: {value.trade_price.toLocaleString()} 원
+              </Typography>
+              <Typography key={code}>
+                <span
+                  style={{
+                    color:
+                      value.change === "RISE"
+                        ? "red"
+                        : value.change === "FALL"
+                          ? "blue"
+                          : value.change === "EVEN"
+                            ? "gray"
+                            : "black",
+                  }}
+                >
+                  {value.change_price.toLocaleString()} 원
+                </span>
+              </Typography>
+
+              <Typography key={code}>{value.acc_trade_price_24h.toLocaleString()} 원</Typography>
+            </Box>
           ))}
       </Box>
     </Container>
