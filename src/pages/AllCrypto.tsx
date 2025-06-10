@@ -93,6 +93,11 @@ const AllCrypto = () => {
 
   const onClickCrypto = () => {};
 
+  const change24AmountTrade = (amount: number) => {
+    const million = amount / 1_000_000;
+    return `${million.toFixed(1)}백만`;
+  };
+
   return (
     <Container
       maxWidth="xl"
@@ -118,37 +123,50 @@ const AllCrypto = () => {
           border: 1,
           display: "grid",
           placeItems: "center",
+          justifyContent: "flex-end",
         }}
       >
         {Object.entries(price)
           // .slice(0, 5)
           .map(([code, value]) => (
-            <Box sx={{ display: "flex", placeItems: "center", gap: 5, color: "black" }}>
-              <Typography
-                key={code}
-                sx={{ cursor: "pointer", "&:hover": { textDecoration: "underline", backgroundColor: "orange" } }}
-                onClick={onClickCrypto}
-              >
+            <Box
+              sx={{
+                display: "flex",
+                placeItems: "flex-end",
+                gap: 5,
+                color: "black",
+                padding: 2.5,
+                border: 1,
+                borderRadius: 1,
+                cursor: "pointer",
+                "&:hover": { textDecoration: "underline", backgroundColor: "orange" },
+              }}
+            >
+              <Typography key={code} sx={{ pb: 1 }} onClick={onClickCrypto}>
                 {code}: {value.trade_price.toLocaleString()} 원
               </Typography>
-              <Typography>
-                <span
-                  style={{
-                    color:
-                      value.change === "RISE"
-                        ? "red"
-                        : value.change === "FALL"
-                          ? "blue"
-                          : value.change === "EVEN"
-                            ? "gray"
-                            : "black",
-                  }}
-                >
-                  {value.change_price.toLocaleString()} 원
-                </span>
+              <Typography
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center", // 가운데 정렬
+                }}
+                style={{
+                  color:
+                    value.change === "RISE"
+                      ? "red"
+                      : value.change === "FALL"
+                        ? "blue"
+                        : value.change === "EVEN"
+                          ? "gray"
+                          : "black",
+                }}
+              >
+                <span>{value.signed_change_price.toLocaleString()}원</span>
+                <span> {(value.change_rate * 100).toFixed(2)}%</span>
               </Typography>
 
-              <Typography>{value.acc_trade_price_24h.toLocaleString()} 원</Typography>
+              <Typography sx={{ pb: 1 }}>{change24AmountTrade(value.acc_trade_price_24h)}</Typography>
             </Box>
           ))}
       </Box>
