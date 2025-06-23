@@ -131,8 +131,10 @@ const AllCrypto = () => {
           .map(([code, value]) => (
             <Box
               sx={{
+                width: "500px",
                 display: "flex",
-                placeItems: "flex-end",
+                alignItems: "center",
+                justifyContent: "space-between",
                 gap: 5,
                 color: "black",
                 padding: 2.5,
@@ -142,11 +144,25 @@ const AllCrypto = () => {
                 "&:hover": { textDecoration: "underline", backgroundColor: "orange" },
               }}
             >
-              <Typography key={code} sx={{ pb: 1 }} onClick={onClickCrypto}>
+              {/* <Box>
+                <img
+                  src="/images/likeIcon.svg"
+                  alt="좋아요"
+                  style={{ width: "50%", height: "50%", objectFit: "cover" }}
+                />
+              </Box> */}
+              <Typography
+                key={code}
+                sx={{ pb: 1, fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: "100px" }}
+                onClick={onClickCrypto}
+              >
                 {code}: {value.trade_price.toLocaleString()} 원
               </Typography>
               <Typography
                 sx={{
+                  fontVariantNumeric: "tabular-nums",
+                  textAlign: "right",
+                  minWidth: "100px",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center", // 가운데 정렬
@@ -166,7 +182,9 @@ const AllCrypto = () => {
                 <span> {(value.change_rate * 100).toFixed(2)}%</span>
               </Typography>
 
-              <Typography sx={{ pb: 1 }}>{change24AmountTrade(value.acc_trade_price_24h)}</Typography>
+              <Typography sx={{ pb: 1, fontVariantNumeric: "tabular-nums", textAlign: "right", minWidth: "100px" }}>
+                {change24AmountTrade(value.acc_trade_price_24h)}
+              </Typography>
             </Box>
           ))}
       </Box>
