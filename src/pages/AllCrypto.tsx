@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 interface CoinTickerData {
@@ -93,6 +93,8 @@ const AllCrypto = () => {
 
   const onClickCrypto = () => {};
 
+  const onClickSearchCoin = () => {};
+
   const change24AmountTrade = (amount: number) => {
     const million = amount / 1_000_000;
     return `${million.toFixed(1)}백만`;
@@ -126,6 +128,29 @@ const AllCrypto = () => {
           justifyContent: "flex-end",
         }}
       >
+        <Box
+          sx={{
+            width: "540px",
+            height: "60px",
+            border: 1,
+            borderRadius: "10px",
+            display: "flex",
+
+            placeItems: "center",
+          }}
+        >
+          <TextField placeholder="코인/심볼명 찾기" sx={{ height: "55px", width: "400px" }}></TextField>
+          <Button
+            onClick={onClickSearchCoin}
+            variant="contained"
+            sx={{ height: "55px", color: "white", padding: "5px" }}
+          >
+            검색
+          </Button>
+          <Button>
+            <img src="/images/option.svg" alt="옵션 아이콘" width={24} height={24} />
+          </Button>
+        </Box>
         {Object.entries(price)
           // .slice(0, 5)
           .map(([code, value]) => (
@@ -153,7 +178,7 @@ const AllCrypto = () => {
               </Box> */}
               <Typography
                 key={code}
-                sx={{ pb: 1, fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: "100px" }}
+                sx={{ pb: 1, fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: "150px" }}
                 onClick={onClickCrypto}
               >
                 {code}: {value.trade_price.toLocaleString()} 원
